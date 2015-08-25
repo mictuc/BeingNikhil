@@ -1,0 +1,17 @@
+//
+//  Turn.swift
+//  BeingNikhil
+//
+//  Created by DesignX Lab2 on 8/20/15.
+//  Copyright (c) 2015 Stanford University. All rights reserved.
+//
+
+import CoreData
+
+class Turn: NSManagedObject {
+    
+    @NSManaged var sensorData: AnyObject
+    @NSManaged var drive: Drive
+    @NSManaged var turnNumber: NSNumber
+    
+}

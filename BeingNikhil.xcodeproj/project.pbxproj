@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		087F2D501B8693EE0066833E /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F2D4F1B8693EE0066833E /* Route.swift */; };
+		087F2D521B8693F70066833E /* Subject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F2D511B8693F70066833E /* Subject.swift */; };
+		087F2D541B869A000066833E /* SubjectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F2D531B869A000066833E /* SubjectTableViewController.swift */; };
+		087F2D561B869A800066833E /* DriveTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F2D551B869A800066833E /* DriveTableViewController.swift */; };
+		08A9C16A1B83FB7600747B40 /* RouteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A9C1691B83FB7600747B40 /* RouteTableViewController.swift */; };
+		08C794491B864F3A004F4AF7 /* Turn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C794481B864F3A004F4AF7 /* Turn.swift */; };
+		C8451DA81B02547C0001D730 /* SegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8451DA71B02547C0001D730 /* SegmentedControl.swift */; };
+		C8451DAC1B0259760001D730 /* Drive.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8451DAB1B0259760001D730 /* Drive.swift */; };
+		C8451DAE1B0259770001D730 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8451DAD1B0259770001D730 /* Location.swift */; };
+		C8D893A81AF9D072006DDF2C /* ReferenceFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D893A71AF9D072006DDF2C /* ReferenceFrame.swift */; };
 		C8DA67A41AF4C1A7001D9F37 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DA67A31AF4C1A7001D9F37 /* AppDelegate.swift */; };
 		C8DA67A71AF4C1A7001D9F37 /* BeingNikhil.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C8DA67A51AF4C1A7001D9F37 /* BeingNikhil.xcdatamodeld */; };
 		C8DA67A91AF4C1A7001D9F37 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DA67A81AF4C1A7001D9F37 /* ViewController.swift */; };
@@ -14,6 +24,8 @@
 		C8DA67AE1AF4C1A7001D9F37 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C8DA67AD1AF4C1A7001D9F37 /* Images.xcassets */; };
 		C8DA67B11AF4C1A7001D9F37 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C8DA67AF1AF4C1A7001D9F37 /* LaunchScreen.xib */; };
 		C8DA67BD1AF4C1A7001D9F37 /* BeingNikhilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DA67BC1AF4C1A7001D9F37 /* BeingNikhilTests.swift */; };
+		C8DA67C71AF4C6C6001D9F37 /* MotionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DA67C61AF4C6C6001D9F37 /* MotionManager.swift */; };
+		C8DA67C91AF4C6D3001D9F37 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DA67C81AF4C6D3001D9F37 /* LocationManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,6 +39,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0820A2191B854E6F00CDC0E2 /* BeingNikhil 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "BeingNikhil 2.xcdatamodel"; sourceTree = "<group>"; };
+		087F2D4F1B8693EE0066833E /* Route.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
+		087F2D511B8693F70066833E /* Subject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Subject.swift; sourceTree = "<group>"; };
+		087F2D531B869A000066833E /* SubjectTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubjectTableViewController.swift; sourceTree = "<group>"; };
+		087F2D551B869A800066833E /* DriveTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DriveTableViewController.swift; sourceTree = "<group>"; };
+		08A9C1691B83FB7600747B40 /* RouteTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteTableViewController.swift; sourceTree = "<group>"; };
+		08C794481B864F3A004F4AF7 /* Turn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Turn.swift; sourceTree = "<group>"; };
+		C8451DA71B02547C0001D730 /* SegmentedControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentedControl.swift; sourceTree = "<group>"; };
+		C8451DAB1B0259760001D730 /* Drive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Drive.swift; sourceTree = "<group>"; };
+		C8451DAD1B0259770001D730 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		C8D893A71AF9D072006DDF2C /* ReferenceFrame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReferenceFrame.swift; sourceTree = "<group>"; };
 		C8DA679E1AF4C1A7001D9F37 /* BeingNikhil.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BeingNikhil.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8DA67A21AF4C1A7001D9F37 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C8DA67A31AF4C1A7001D9F37 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -38,6 +61,8 @@
 		C8DA67B61AF4C1A7001D9F37 /* BeingNikhilTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BeingNikhilTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8DA67BB1AF4C1A7001D9F37 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C8DA67BC1AF4C1A7001D9F37 /* BeingNikhilTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeingNikhilTests.swift; sourceTree = "<group>"; };
+		C8DA67C61AF4C6C6001D9F37 /* MotionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MotionManager.swift; sourceTree = "<group>"; };
+		C8DA67C81AF4C6D3001D9F37 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +83,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C8451DAF1B02598C0001D730 /* Data Model */ = {
+			isa = PBXGroup;
+			children = (
+				C8451DAB1B0259760001D730 /* Drive.swift */,
+				C8451DAD1B0259770001D730 /* Location.swift */,
+				08C794481B864F3A004F4AF7 /* Turn.swift */,
+				087F2D4F1B8693EE0066833E /* Route.swift */,
+				087F2D511B8693F70066833E /* Subject.swift */,
+			);
+			name = "Data Model";
+			sourceTree = "<group>";
+		};
+		C8451DB01B0259DF0001D730 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C8D893A71AF9D072006DDF2C /* ReferenceFrame.swift */,
+				C8451DA71B02547C0001D730 /* SegmentedControl.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
+		C8451DB11B025A340001D730 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				C8DA67C81AF4C6D3001D9F37 /* LocationManager.swift */,
+				C8DA67C61AF4C6C6001D9F37 /* MotionManager.swift */,
+			);
+			name = Managers;
+			sourceTree = "<group>";
+		};
 		C8DA67951AF4C1A7001D9F37 = {
 			isa = PBXGroup;
 			children = (
@@ -81,10 +136,16 @@
 			children = (
 				C8DA67A31AF4C1A7001D9F37 /* AppDelegate.swift */,
 				C8DA67A81AF4C1A7001D9F37 /* ViewController.swift */,
+				08A9C1691B83FB7600747B40 /* RouteTableViewController.swift */,
+				087F2D531B869A000066833E /* SubjectTableViewController.swift */,
+				087F2D551B869A800066833E /* DriveTableViewController.swift */,
 				C8DA67AA1AF4C1A7001D9F37 /* Main.storyboard */,
+				C8451DB11B025A340001D730 /* Managers */,
+				C8451DB01B0259DF0001D730 /* Extensions */,
 				C8DA67AD1AF4C1A7001D9F37 /* Images.xcassets */,
 				C8DA67AF1AF4C1A7001D9F37 /* LaunchScreen.xib */,
 				C8DA67A51AF4C1A7001D9F37 /* BeingNikhil.xcdatamodeld */,
+				C8451DAF1B02598C0001D730 /* Data Model */,
 				C8DA67A11AF4C1A7001D9F37 /* Supporting Files */,
 			);
 			path = BeingNikhil;
@@ -159,11 +220,21 @@
 		C8DA67961AF4C1A7001D9F37 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftMigration = 0700;
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = "Stanford University";
 				TargetAttributes = {
 					C8DA679D1AF4C1A7001D9F37 = {
 						CreatedOnToolsVersion = 6.3.1;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Maps.iOS = {
+								enabled = 0;
+							};
+						};
 					};
 					C8DA67B51AF4C1A7001D9F37 = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -216,8 +287,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				C8DA67A91AF4C1A7001D9F37 /* ViewController.swift in Sources */,
+				087F2D561B869A800066833E /* DriveTableViewController.swift in Sources */,
+				087F2D521B8693F70066833E /* Subject.swift in Sources */,
+				C8451DA81B02547C0001D730 /* SegmentedControl.swift in Sources */,
+				C8451DAE1B0259770001D730 /* Location.swift in Sources */,
 				C8DA67A71AF4C1A7001D9F37 /* BeingNikhil.xcdatamodeld in Sources */,
+				C8451DAC1B0259760001D730 /* Drive.swift in Sources */,
+				08A9C16A1B83FB7600747B40 /* RouteTableViewController.swift in Sources */,
+				C8DA67C91AF4C6D3001D9F37 /* LocationManager.swift in Sources */,
 				C8DA67A41AF4C1A7001D9F37 /* AppDelegate.swift in Sources */,
+				C8D893A81AF9D072006DDF2C /* ReferenceFrame.swift in Sources */,
+				087F2D501B8693EE0066833E /* Route.swift in Sources */,
+				08C794491B864F3A004F4AF7 /* Turn.swift in Sources */,
+				087F2D541B869A000066833E /* SubjectTableViewController.swift in Sources */,
+				C8DA67C71AF4C6C6001D9F37 /* MotionManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -346,6 +429,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = BeingNikhil/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -356,6 +443,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = BeingNikhil/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -415,6 +506,7 @@
 				C8DA67C21AF4C1A7001D9F37 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C8DA67C31AF4C1A7001D9F37 /* Build configuration list for PBXNativeTarget "BeingNikhilTests" */ = {
 			isa = XCConfigurationList;
@@ -423,6 +515,7 @@
 				C8DA67C51AF4C1A7001D9F37 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
@@ -430,9 +523,10 @@
 		C8DA67A51AF4C1A7001D9F37 /* BeingNikhil.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				0820A2191B854E6F00CDC0E2 /* BeingNikhil 2.xcdatamodel */,
 				C8DA67A61AF4C1A7001D9F37 /* BeingNikhil.xcdatamodel */,
 			);
-			currentVersion = C8DA67A61AF4C1A7001D9F37 /* BeingNikhil.xcdatamodel */;
+			currentVersion = 0820A2191B854E6F00CDC0E2 /* BeingNikhil 2.xcdatamodel */;
 			path = BeingNikhil.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
