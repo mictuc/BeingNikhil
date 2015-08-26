@@ -19,21 +19,27 @@ class SubjectTableViewController: UITableViewController, UITableViewDataSource, 
     let subjectSegueIdentifier = "subjectSegue"
     var subjectIDToSend = NSManagedObjectID()
 
-    
+    var storeDrive = Bool()
+    let unwindSegueIdentifier = "unwindSegue"
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        println(storeDrive)
         let route = managedObjectContext!.objectWithID(routeID) as! Route
-        title = route.name + " Subjects"
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        if storeDrive {
+            title = "Select Route to Save Drive"
+        } else {
+            title = route.name + "'s Subjects"
+        }
         fetchSubject()
     }
-    
+        
     func fetchSubject() {
         let route = managedObjectContext!.objectWithID(routeID) as! Route
         let predicate = NSPredicate(format: "route == %@", route)
         let fetchRequest = NSFetchRequest(entityName: "Subject")
         fetchRequest.predicate = predicate
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         if let fetchResults = managedObjectContext!.executeFetchRequest(fetchRequest, error: nil) as? [Subject] {
             subjects = fetchResults
         }
@@ -46,8 +52,13 @@ class SubjectTableViewController: UITableViewController, UITableViewDataSource, 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell") as! UITableViewCell
         let subject = subjects[indexPath.row] as! Subject
-        
-        //let subject = subjects[indexPath.row] as! Subject
+        let fetchRequest = NSFetchRequest(entityName: "Drive")
+        let predicate = NSPredicate(format: "subject == %@", subject)
+        fetchRequest.predicate = predicate
+        if let fetchResults = managedObjectContext!.executeFetchRequest(fetchRequest, error: nil) as? [Drive] {
+            println("Drives Fetched")
+            cell.detailTextLabel?.text = "Drives: \(fetchResults.count)"
+        }
         cell.textLabel!.text = subject.valueForKey("name") as? String
         return cell
     }
@@ -78,7 +89,17 @@ class SubjectTableViewController: UITableViewController, UITableViewDataSource, 
         let subject = subjects[row] as! Subject
         subjectIDToSend = subject.objectID
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        performSegueWithIdentifier(subjectSegueIdentifier, sender: cell)
+        if storeDrive {
+            sharedMotion.drive.subject = subject
+            //sharedMotion.drive.setValue(subject, forKey: "subject")
+            performSegueWithIdentifier(unwindSegueIdentifier, sender: cell)
+        } else {
+            performSegueWithIdentifier(subjectSegueIdentifier, sender: cell)
+        }
+    }
+    
+    func unwindSegue() {
+        performSegueWithIdentifier(unwindSegueIdentifier, sender: self)
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -86,6 +107,7 @@ class SubjectTableViewController: UITableViewController, UITableViewDataSource, 
             let navVC = segue.destinationViewController as! UINavigationController
             let driveVC = navVC.viewControllers.first as! DriveTableViewController
             driveVC.subjectID = subjectIDToSend
+            driveVC.storeDrive = storeDrive
         }
     }
     

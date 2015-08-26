@@ -16,17 +16,23 @@ class RouteTableViewController: UITableViewController, UITableViewDataSource, UI
     var routes = [NSManagedObject]()
     let routeSegueIdentifier = "routeSegue"
     var routeIDToSend = NSManagedObjectID()
-    
+    var storeDrive = Bool()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Routes"
-        tableView.registerClass(UITableViewCell.self,
-            forCellReuseIdentifier: "Cell")
-            fetchRoute()
+        if storeDrive {
+            //self.navigationItem.hidesBackButton = true
+            title = "Select Route to Save Drive"
+        } else {
+            //self.navigationItem.hidesBackButton = false
+            title = "Routes"
+        }
+        fetchRoute()
     }
     
     func fetchRoute() {
         let fetchRequest = NSFetchRequest(entityName: "Route")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         if let fetchResults = managedObjectContext!.executeFetchRequest(fetchRequest, error: nil) as? [Route] {
             routes = fetchResults
         }
@@ -40,6 +46,14 @@ class RouteTableViewController: UITableViewController, UITableViewDataSource, UI
             let cell = tableView.dequeueReusableCellWithIdentifier("Cell") as! UITableViewCell
             let route = routes[indexPath.row]
             cell.textLabel!.text = route.valueForKey("name") as? String
+            let predicate = NSPredicate(format: "route == %@", route)
+            let fetchRequest = NSFetchRequest(entityName: "Subject")
+            fetchRequest.predicate = predicate
+            if let fetchResults = managedObjectContext!.executeFetchRequest(fetchRequest, error: nil) as? [Subject] {
+                println("Subjects Fetched")
+                cell.detailTextLabel?.text = "Subjects: \(fetchResults.count)"
+            }
+        
             return cell
     }
     
@@ -78,6 +92,7 @@ class RouteTableViewController: UITableViewController, UITableViewDataSource, UI
             let navVC = segue.destinationViewController as! UINavigationController
             let subjectVC = navVC.viewControllers.first as! SubjectTableViewController
             subjectVC.routeID = routeIDToSend
+            subjectVC.storeDrive = storeDrive
         }
     }
 

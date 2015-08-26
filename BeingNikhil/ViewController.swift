@@ -15,7 +15,9 @@ class ViewController: UIViewController {
     @IBOutlet var mapView: MKMapView!
     @IBOutlet var label: UILabel!
     let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
-
+    let storeDriveSegueIdentifier = "storeDriveSegue"
+    
+    @IBOutlet weak var turnLabel: UILabel!
     enum Mode {
         case Store
         case Match
@@ -25,7 +27,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         let locations = sharedLocation.locations
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Play, target: self, action: "monitorDeviceMotion")
@@ -60,6 +62,14 @@ class ViewController: UIViewController {
         label.text = String(format: "DTW: %.2f", sharedMotion.DTW)
     }
     
+    func turnStarted(notification: NSNotification) {
+        turnLabel.text = "Turn Started"
+    }
+    
+    func turnEnded(notification: NSNotification) {
+        turnLabel.text = "Turn Ended"
+    }
+    
     func monitorDeviceMotion() {
         monitor = !monitor
         
@@ -68,68 +78,24 @@ class ViewController: UIViewController {
             navigationItem.setLeftBarButtonItem(UIBarButtonItem(barButtonSystemItem: .Pause, target: self, action: "monitorDeviceMotion"), animated: true)
         } else {
             sharedMotion.stopMonitoringDeviceMotion()
-            routeAlert()
             navigationItem.setLeftBarButtonItem(UIBarButtonItem(barButtonSystemItem: .Play, target: self, action: "monitorDeviceMotion"), animated: true)
+            performSegueWithIdentifier(storeDriveSegueIdentifier, sender: navigationItem.leftBarButtonItem)
         }
     }
     
-    func routeAlert(){
-        var routeName = String()
-        let routePrompt = UIAlertController(title: "Enter Route Name", message: "Enter Route", preferredStyle: .Alert)
-        routePrompt.inputViewController
-        var routeTextField: UITextField?
-        routePrompt.addTextFieldWithConfigurationHandler {
-            (textField) -> Void in
-            routeTextField = textField
-            textField.placeholder = "Route"
-        }
-        
-        routePrompt.addAction(UIAlertAction(title: "Ok",style: .Default,
-            handler: { (action) -> Void in
-                if let textField = routeTextField {
-                    routeName = textField.text as String
-                    self.subjectAlert(routeName)
-                }
-        }))
-        self.presentViewController(routePrompt,
-            animated: true,
-            completion: nil)
+    @IBAction func unwindToVC(segue: UIStoryboardSegue) {
     }
     
-    func subjectAlert(routeName: String) {
-        var subjectName = String()
-        
-        let subjectPrompt = UIAlertController(title: "Enter Subject Name", message: "Enter Subject", preferredStyle: .Alert)
-        subjectPrompt.inputViewController
-        var subjectTextField: UITextField?
-        subjectPrompt.addTextFieldWithConfigurationHandler {
-            (textField) -> Void in
-            subjectTextField = textField
-            textField.placeholder = "Subject"
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+        if (segue.identifier == "storeDriveSegue") {
+            let navVC = segue.destinationViewController as! UINavigationController
+            let rVC = navVC.viewControllers.first as! RouteTableViewController
+            rVC.storeDrive = true
+        } else {
+            let navVC = segue.destinationViewController as! UINavigationController
+            let rVC = navVC.viewControllers.first as! RouteTableViewController
+            rVC.storeDrive = false
         }
-        
-        subjectPrompt.addAction(UIAlertAction(title: "Ok",style: .Default,
-            handler: { (action) -> Void in
-                if let textField = subjectTextField {
-                    subjectName = textField.text
-                    let routePredicate = NSPredicate(format: "route.name == %@", routeName)
-                    let subjectPredicate = NSPredicate(format: "name == %@", subjectName)
-                    let predicate = NSCompoundPredicate(type: NSCompoundPredicateType.AndPredicateType, subpredicates: [routePredicate, subjectPredicate])
-                    
-                    let fetchRequest = NSFetchRequest(entityName: "Subject")
-                    fetchRequest.predicate = predicate
-                    if let fetchResults = self.managedObjectContext!.executeFetchRequest(fetchRequest, error: nil) as? [Subject] {
-                        print("Predicate worked!")
-                        sharedMotion.drive.subject = fetchResults[0]
-                        print(sharedMotion.drive.subject)
-                        print(sharedMotion.drive)
-                    }
-                }
-        }))
-        
-        self.presentViewController(subjectPrompt,
-            animated: true,
-            completion: nil)
     }
     
     @IBAction func modeType(sender: UISegmentedControl) {
@@ -156,3 +122,5 @@ class ViewController: UIViewController {
         }
     }
 }
+
+let mainView = ViewController()

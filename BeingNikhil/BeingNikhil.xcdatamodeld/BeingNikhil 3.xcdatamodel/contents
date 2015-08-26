@@ -4,7 +4,6 @@
         <attribute name="duration" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="selected" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="timestamp" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="turnCount" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="locations" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Location" inverseName="drive" inverseEntity="Location" syncable="YES"/>
         <relationship name="subject" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Subject" inverseName="drives" inverseEntity="Subject" syncable="YES"/>
         <relationship name="turns" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Turn" inverseName="drive" inverseEntity="Turn" syncable="YES"/>
@@ -25,15 +24,16 @@
         <relationship name="route" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Route" inverseName="subjects" inverseEntity="Route" syncable="YES"/>
     </entity>
     <entity name="Turn" representedClassName="BeingNikhil.Turn" syncable="YES">
+        <attribute name="dataString" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="sensorData" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="turnNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="drive" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Drive" inverseName="turns" inverseEntity="Drive" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Drive" positionX="-63" positionY="-18" width="128" height="150"/>
+        <element name="Drive" positionX="-63" positionY="-18" width="128" height="135"/>
         <element name="Location" positionX="-54" positionY="-9" width="128" height="75"/>
         <element name="Route" positionX="-45" positionY="45" width="128" height="90"/>
         <element name="Subject" positionX="-36" positionY="54" width="128" height="105"/>
-        <element name="Turn" positionX="-36" positionY="45" width="128" height="90"/>
+        <element name="Turn" positionX="-36" positionY="45" width="128" height="105"/>
     </elements>
 </model>

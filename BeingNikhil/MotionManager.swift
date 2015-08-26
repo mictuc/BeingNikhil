@@ -14,6 +14,7 @@ class MotionManager: NSObject {
     
     let manager = CMMotionManager()
     var drives = [NSManagedObject]()
+    //var drive = Drive()
     
     override init() {
         super.init()
@@ -78,6 +79,7 @@ class MotionManager: NSObject {
     var rotationRatesInTurn = [Double]()
     var priorRotationRatesInTurn = [Double](count: 1, repeatedValue: 0)
     var turnCount = 0
+    var turnArray = [Turn]()
     
     func detectDeviceRotationEndpoints(z: Double) {
         updateSimpleMovingAverageOfRotationalEnergy(z)
@@ -97,8 +99,10 @@ class MotionManager: NSObject {
                 priorRotationRatesInTurn = rotationRatesInTurn
                 turn.sensorData = priorRotationRatesInTurn
                 turn.turnNumber = turnCount
+                turn.dataString = priorRotationRatesInTurn.description
+                turnArray.append(turn)
                 turn.drive = drive
-                drive.turnCount = self.turnCount
+                //drive.turnCount = self.turnCount
                 updateDTW()
             }
         }
@@ -111,16 +115,26 @@ class MotionManager: NSObject {
     
     var deviceMotions = [CMDeviceMotion]()
     
-    func storeDeviceMotionData() {
-        //let drive = NSEntityDescription.insertNewObjectForEntityForName("Drive", inManagedObjectContext: managedObjectContext) as! Drive
-        
+    func storeDeviceMotionData(){ //subjectID: NSManagedObjectID) {
+        let appDelegate =
+        UIApplication.sharedApplication().delegate as! AppDelegate
+        let managedContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext!
+//        let entity =  NSEntityDescription.entityForName("Drive", inManagedObjectContext: managedContext)
+//        drive = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
+//        drive.setValue(startMonitoringDate, forKey: "timestamp")
+//        drive.setValue(NSDate().timeIntervalSinceDate(startMonitoringDate), forKey: "duration")
+//        drive.setValue(false, forKey: "selected")
+//        drive.setValue(turnCount, forKey: "turnCount")
+
         drive.timestamp = startMonitoringDate
         drive.duration = NSDate().timeIntervalSinceDate(startMonitoringDate)
-        for deviceMotion in deviceMotions {
-            //let motion = NSEntityDescription.insertNewObjectForEntityForName("Motion", inManagedObjectContext: managedObjectContext) as! Motion
-            let turn = NSEntityDescription.insertNewObjectForEntityForName("Turn", inManagedObjectContext: managedObjectContext) as! Turn
-            turn.sensorData = deviceMotion
-            turn.drive = drive
+        drive.selected = false
+        //drive.turnCount = turnCount
+//        let subject = managedObjectContext.objectWithID(subjectID) as! Subject
+//        drive.setValue(subject, forKey: "subject")
+        for turn in turnArray {
+//            let motion = NSEntityDescription.insertNewObjectForEntityForName("Motion", inManagedObjectContext: managedObjectContext) as! Motion
+            turn.drive = managedObjectContext.objectWithID(drive.objectID) as! Drive
         }
     }
     
@@ -154,9 +168,15 @@ class MotionManager: NSObject {
     lazy var drive = Drive()
     
     func startMonitoringDeviceMotion() {
+//        let appDelegate =
+//        UIApplication.sharedApplication().delegate as! AppDelegate
+//        let managedContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext!
+//        let entity =  NSEntityDescription.entityForName("Drive", inManagedObjectContext: managedContext)
+//        drive = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
+        //let drive = NSEntityDescription.insertNewObjectForEntityForName("Drive", inManagedObjectContext: managedObjectContext) as! Drive
         drive = NSEntityDescription.insertNewObjectForEntityForName("Drive", inManagedObjectContext: managedObjectContext) as! Drive
         sharedLocation.manager.startUpdatingLocation()
-        
+        turnCount = 0
         startMonitoringDate = NSDate()
         
         if manager.deviceMotionAvailable {

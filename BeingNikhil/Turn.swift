@@ -13,5 +13,6 @@ class Turn: NSManagedObject {
     @NSManaged var sensorData: AnyObject
     @NSManaged var drive: Drive
     @NSManaged var turnNumber: NSNumber
+    @NSManaged var dataString: String
     
 }
