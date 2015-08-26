@@ -75,9 +75,9 @@ class DriveTableViewController: UITableViewController, UITableViewDataSource, UI
     
     func fetchDrive() {
         let subject = managedObjectContext!.objectWithID(subjectID) as! Subject
-        let predicate = NSPredicate(format: "subject == %@", subject)
+        //let predicate = NSPredicate(format: "subject == %@", subject)
         let fetchRequest = NSFetchRequest(entityName: "Drive")
-        fetchRequest.predicate = predicate
+        //fetchRequest.predicate = predicate
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
         if let fetchResults = managedObjectContext!.executeFetchRequest(fetchRequest, error: nil) as? [Drive] {
             drives = fetchResults
@@ -107,6 +107,7 @@ class DriveTableViewController: UITableViewController, UITableViewDataSource, UI
         
         if drive.selected {
             cell.accessoryType = UITableViewCellAccessoryType.Checkmark;
+            //UITableViewCellAccessoryType.
         } else {
             cell.accessoryType = UITableViewCellAccessoryType.None;
         }
@@ -121,6 +122,15 @@ class DriveTableViewController: UITableViewController, UITableViewDataSource, UI
         if(editingStyle == .Delete ) {
             // Find the Drive object the user is trying to delete
             let driveToDelete = drives[indexPath.row] as! Drive
+            
+            let turns = driveToDelete.turns
+            for turn in turns {
+                managedObjectContext?.deleteObject(turn as! NSManagedObject)
+            }
+            let locations = driveToDelete.locations
+            for location in locations {
+                managedObjectContext?.deleteObject(location as! NSManagedObject)
+            }
             
             // Delete it from the managedObjectContext
             managedObjectContext?.deleteObject(driveToDelete)

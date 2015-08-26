@@ -27,7 +27,7 @@ class SubjectTableViewController: UITableViewController, UITableViewDataSource, 
         println(storeDrive)
         let route = managedObjectContext!.objectWithID(routeID) as! Route
         if storeDrive {
-            title = "Select Route to Save Drive"
+            title = "Select Subject to Save Drive"
         } else {
             title = route.name + "'s Subjects"
         }
@@ -71,6 +71,20 @@ class SubjectTableViewController: UITableViewController, UITableViewDataSource, 
         if(editingStyle == .Delete ) {
             // Find the Drive object the user is trying to delete
             let subjectToDelete = subjects[indexPath.row] as! Subject
+
+            let drives = subjectToDelete.drives
+            for drive in drives {
+                let tempDrive = drive as! Drive
+                let turns = tempDrive.turns
+                for turn in turns {
+                    managedObjectContext?.deleteObject(turn as! NSManagedObject)
+                }
+                let locations = tempDrive.locations
+                for location in locations {
+                    managedObjectContext?.deleteObject(location as! NSManagedObject)
+                }
+                managedObjectContext?.deleteObject(drive as! NSManagedObject)
+            }
             
             // Delete it from the managedObjectContext
             managedObjectContext?.deleteObject(subjectToDelete)

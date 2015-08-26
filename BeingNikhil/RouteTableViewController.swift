@@ -64,8 +64,25 @@ class RouteTableViewController: UITableViewController, UITableViewDataSource, UI
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if(editingStyle == .Delete ) {
             // Find the Drive object the user is trying to delete
-            let routeToDelete = routes[indexPath.row]
-            
+            let routeToDelete = routes[indexPath.row] as! Route
+            let subjects = routeToDelete.subjects
+            for subject in subjects {
+                let tempSubject = subject as! Subject
+                let drives = tempSubject.drives
+                for drive in drives {
+                    let tempDrive = drive as! Drive
+                    let turns = tempDrive.turns
+                    for turn in turns {
+                        managedObjectContext?.deleteObject(turn as! NSManagedObject)
+                    }
+                    let locations = tempDrive.locations
+                    for location in locations {
+                        managedObjectContext?.deleteObject(location as! NSManagedObject)
+                    }
+                    managedObjectContext?.deleteObject(drive as! NSManagedObject)
+                }
+                managedObjectContext?.deleteObject(subject as! NSManagedObject)
+            }
             // Delete it from the managedObjectContext
             managedObjectContext?.deleteObject(routeToDelete)
             
