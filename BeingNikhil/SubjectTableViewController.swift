@@ -19,14 +19,13 @@ class SubjectTableViewController: UITableViewController, UITableViewDataSource, 
     let subjectSegueIdentifier = "subjectSegue"
     var subjectIDToSend = NSManagedObjectID()
 
-    var storeDrive = Bool()
+    //var storeDrive = Bool()
     let unwindSegueIdentifier = "unwindSegue"
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        println(storeDrive)
         let route = managedObjectContext!.objectWithID(routeID) as! Route
-        if storeDrive {
+        if sharedView.storeDrive {
             title = "Select Subject to Save Drive"
         } else {
             title = route.name + "'s Subjects"
@@ -79,10 +78,10 @@ class SubjectTableViewController: UITableViewController, UITableViewDataSource, 
                 for turn in turns {
                     managedObjectContext?.deleteObject(turn as! NSManagedObject)
                 }
-                let locations = tempDrive.locations
-                for location in locations {
-                    managedObjectContext?.deleteObject(location as! NSManagedObject)
-                }
+//                let locations = tempDrive.locations
+//                for location in locations {
+//                    managedObjectContext?.deleteObject(location as! NSManagedObject)
+//                }
                 managedObjectContext?.deleteObject(drive as! NSManagedObject)
             }
             
@@ -103,7 +102,7 @@ class SubjectTableViewController: UITableViewController, UITableViewDataSource, 
         let subject = subjects[row] as! Subject
         subjectIDToSend = subject.objectID
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        if storeDrive {
+        if sharedView.storeDrive {
             sharedMotion.drive.subject = subject
             //sharedMotion.drive.setValue(subject, forKey: "subject")
             performSegueWithIdentifier(unwindSegueIdentifier, sender: cell)
@@ -121,7 +120,6 @@ class SubjectTableViewController: UITableViewController, UITableViewDataSource, 
             let navVC = segue.destinationViewController as! UINavigationController
             let driveVC = navVC.viewControllers.first as! DriveTableViewController
             driveVC.subjectID = subjectIDToSend
-            driveVC.storeDrive = storeDrive
         }
     }
     
@@ -134,22 +132,26 @@ class SubjectTableViewController: UITableViewController, UITableViewDataSource, 
     let addItemTextAlertViewTag = 1
     
     @IBAction func addSubject(sender: AnyObject) {
-        let titlePrompt = UIAlertController(title: "Enter Subject Name", message: "Enter Name", preferredStyle: .Alert)
+        let namePrompt = UIAlertController(title: "Enter Subject Name", message: nil, preferredStyle: .Alert)
         var titleTextField: UITextField?
-        titlePrompt.addTextFieldWithConfigurationHandler {
+        namePrompt.addTextFieldWithConfigurationHandler {
             (textField) -> Void in
             titleTextField = textField
             textField.placeholder = "Name"
         }
         
-        titlePrompt.addAction(UIAlertAction(title: "Ok",style: .Default,
+        namePrompt.addAction(UIAlertAction(title: "Cancel",style: .Default,
+            handler: { (action) -> Void in
+        }))
+
+        namePrompt.addAction(UIAlertAction(title: "Ok",style: .Default,
             handler: { (action) -> Void in
                 if let textField = titleTextField {
                     self.saveNewSubject(textField.text)
                 }
         }))
         
-        self.presentViewController(titlePrompt,
+        self.presentViewController(namePrompt,
             animated: true,
             completion: nil)
         

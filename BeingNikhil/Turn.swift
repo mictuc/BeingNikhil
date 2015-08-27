@@ -20,8 +20,19 @@ class Turn: NSManagedObject {
     @NSManaged var startLocation: AnyObject
     @NSManaged var endLocation: AnyObject
     
-    func csv() {
-        
+    func csv() -> String {
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "h:mm:ss a"
+//                let coalescedTimestamp = dateFormatter.stringFromDate(timestamp)  ?? ""
+        let coalescedTurnCount = turnNumber.stringValue
+        let coalescedStartTime = dateFormatter.stringFromDate(startTime)
+        let coalescedEndTime = dateFormatter.stringFromDate(endTime)
+        let coalescedDuration = duration
+        let coalescedStartLocation = startLocation.description
+        let coalescedEndLocation = endLocation.description
+        let coalescedTurnData = dataString
+        return "\(coalescedTurnCount),\(coalescedStartTime),\(coalescedTurnCount),\(coalescedDuration),"
+            + "\(coalescedStartLocation),\(coalescedEndLocation),\(coalescedTurnData)\n"
     }
     
 }

@@ -16,17 +16,19 @@ class RouteTableViewController: UITableViewController, UITableViewDataSource, UI
     var routes = [NSManagedObject]()
     let routeSegueIdentifier = "routeSegue"
     var routeIDToSend = NSManagedObjectID()
-    var storeDrive = Bool()
 
+    
+    //FIX back button hiding...
     override func viewDidLoad() {
         super.viewDidLoad()
-        if storeDrive {
+        if sharedView.storeDrive {
             //self.navigationItem.hidesBackButton = true
             title = "Select Route to Save Drive"
         } else {
-            //self.navigationItem.hidesBackButton = false
+//            self.navigationItem.hidesBackButton = false
             title = "Routes"
         }
+
         fetchRoute()
     }
     
@@ -75,10 +77,10 @@ class RouteTableViewController: UITableViewController, UITableViewDataSource, UI
                     for turn in turns {
                         managedObjectContext?.deleteObject(turn as! NSManagedObject)
                     }
-                    let locations = tempDrive.locations
-                    for location in locations {
-                        managedObjectContext?.deleteObject(location as! NSManagedObject)
-                    }
+//                    let locations = tempDrive.locations
+//                    for location in locations {
+//                        managedObjectContext?.deleteObject(location as! NSManagedObject)
+//                    }
                     managedObjectContext?.deleteObject(drive as! NSManagedObject)
                 }
                 managedObjectContext?.deleteObject(subject as! NSManagedObject)
@@ -109,7 +111,7 @@ class RouteTableViewController: UITableViewController, UITableViewDataSource, UI
             let navVC = segue.destinationViewController as! UINavigationController
             let subjectVC = navVC.viewControllers.first as! SubjectTableViewController
             subjectVC.routeID = routeIDToSend
-            subjectVC.storeDrive = storeDrive
+            //subjectVC.storeDrive = storeDrive
         }
     }
 
@@ -122,18 +124,23 @@ class RouteTableViewController: UITableViewController, UITableViewDataSource, UI
     let addItemTextAlertViewTag = 1
 
     @IBAction func addRoute(sender: AnyObject) {
-        let titlePrompt = UIAlertController(title: "Enter Route Name",
-            message: "Enter Text",
+        let namePrompt = UIAlertController(title: "Enter Route Name",
+            message: nil,
             preferredStyle: .Alert)
         
         var titleTextField: UITextField?
-        titlePrompt.addTextFieldWithConfigurationHandler {
+        namePrompt.addTextFieldWithConfigurationHandler {
             (textField) -> Void in
             titleTextField = textField
             textField.placeholder = "Name"
         }
         
-        titlePrompt.addAction(UIAlertAction(title: "Ok",
+        namePrompt.addAction(UIAlertAction(title: "Cancel",
+            style: .Default,
+            handler: { (action) -> Void in
+        }))
+
+        namePrompt.addAction(UIAlertAction(title: "Ok",
             style: .Default,
             handler: { (action) -> Void in
                 if let textField = titleTextField {
@@ -141,10 +148,9 @@ class RouteTableViewController: UITableViewController, UITableViewDataSource, UI
                 }
         }))
         
-        self.presentViewController(titlePrompt,
+        self.presentViewController(namePrompt,
             animated: true,
             completion: nil)
-        
     }
     
     func saveNewRoute(title : String) {

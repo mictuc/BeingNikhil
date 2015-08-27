@@ -88,22 +88,20 @@ class ViewController: UIViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if (segue.identifier == "storeDriveSegue") {
-            let navVC = segue.destinationViewController as! UINavigationController
-            let rVC = navVC.viewControllers.first as! RouteTableViewController
-            rVC.storeDrive = true
+            sharedView.storeDrive = true
         } else {
-            let navVC = segue.destinationViewController as! UINavigationController
-            let rVC = navVC.viewControllers.first as! RouteTableViewController
-            rVC.storeDrive = false
+            sharedView.storeDrive = false
         }
     }
     
     @IBAction func modeType(sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
-            sharedMotion.mode = .Store
+            sharedView.mode = .Record
         case 1:
-            sharedMotion.mode = .Match
+            sharedView.mode = .Compare
+        case 2:
+            sharedView.mode = .Export
         default:
             break
         }

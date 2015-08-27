@@ -10,63 +10,20 @@ import UIKit
 import CoreData
 
 class DriveTableViewController: UITableViewController, UITableViewDataSource, UITableViewDelegate{
+    @IBOutlet weak var shareButton: UIBarButtonItem!
     // Retreive the managedObjectContext from AppDelegate
 
     @IBOutlet var DriveView: UITableView!
     let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
     var drives = [NSManagedObject]()
     var subjectID = NSManagedObjectID()
-    var storeDrive = Bool()
     var unwindSegueID = "unwindSegue"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         let subject = managedObjectContext!.objectWithID(subjectID) as! Subject
-        
         title = subject.name + "'s Drives"
-
-        if storeDrive {
-            let appDelegate =
-            UIApplication.sharedApplication().delegate as! AppDelegate
-            let managedContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext!
-            let entity =  NSEntityDescription.entityForName("Drive", inManagedObjectContext: managedContext)
-            let drive = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
-            var error: NSError?
-            if !managedContext.save(&error) {
-                println("Could not save \(error), \(error?.userInfo)")
-            }
-//            let date = sharedMotion.startMonitoringDate
-//            let dateFormatter = NSDateFormatter()
-//            dateFormatter.dateFormat = "yyyy-MM-dd h:mm a"
-//            drive.setValue("Date: \(dateFormatter.stringFromDate(date))", forKey: "timestamp")
-            drive.setValue(sharedMotion.startMonitoringDate, forKey: "timestamp")
-            drive.setValue(NSDate().timeIntervalSinceDate(sharedMotion.startMonitoringDate), forKey: "duration")
-            drive.setValue(false, forKey: "selected")
-            drive.setValue(sharedMotion.turnCount, forKey: "turnCount")
-            let subject = managedObjectContext!.objectWithID(subjectID) as! Subject
-            drive.setValue(subject, forKey: "subject")
-            for turn in sharedMotion.turnArray {
-                turn.drive = managedObjectContext!.objectWithID(drive.objectID) as! Drive
-            }
-            drives.append(drive)
-            self.tableView.reloadData()
-//
-//            let route = subject.route
-//            let saveAlert = UIAlertController(title: "Drive Saved", message: "Route: \(route.name); Subject: \(subject.name)", preferredStyle: .Alert)
-//            saveAlert.addAction(UIAlertAction(title: "Ok",style: .Default,
-//                handler: { (action) -> Void in
-////                    self.tableView.reloadData()
-//                    //self.unwindSegue()
-//            }))
-//            self.presentViewController(saveAlert,
-//                animated: true,
-//                completion: nil)
-            
-        } else {
-            //tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-            fetchDrive()
-        }
-        
+        fetchDrive()
     }
     
     func unwindSegue() {
@@ -101,7 +58,7 @@ class DriveTableViewController: UITableViewController, UITableViewDataSource, UI
 //        cell.textLabel?.text = "Duration: \(drive.duration)"
 //        cell.textLabel?.text = "\(drive.duration)"
 //        cell.detailTextLabel?.text = "Test"
-        cell.detailTextLabel?.text = "Duration: \(drive.duration)   Turns: \(drive.turns.count)   Subject: \(drive.subject.name)"
+        cell.detailTextLabel?.text = "Duration: \(drive.duration)   Turns: \(drive.turns.count)   Subject: \(drive.subject.name)    Route: \(drive.subject.route.name)"
         //println(drive.timestamp)
 //        println(drive.subject)
         
@@ -127,10 +84,10 @@ class DriveTableViewController: UITableViewController, UITableViewDataSource, UI
             for turn in turns {
                 managedObjectContext?.deleteObject(turn as! NSManagedObject)
             }
-            let locations = driveToDelete.locations
-            for location in locations {
-                managedObjectContext?.deleteObject(location as! NSManagedObject)
-            }
+//            let locations = driveToDelete.locations
+//            for location in locations {
+//                managedObjectContext?.deleteObject(location as! NSManagedObject)
+//            }
             
             // Delete it from the managedObjectContext
             managedObjectContext?.deleteObject(driveToDelete)
@@ -153,7 +110,6 @@ class DriveTableViewController: UITableViewController, UITableViewDataSource, UI
         }else{
             cell!.accessoryType = UITableViewCellAccessoryType.Checkmark
             drive.selected = true
-            exportCSVFile(drive)
 //            let csvAlert = UIAlertController(title: "Enter Subject Name", message: drive.csv(), preferredStyle: .Alert)
 //            
 //            csvAlert.addAction(UIAlertAction(title: "Ok",style: .Default,
@@ -167,55 +123,73 @@ class DriveTableViewController: UITableViewController, UITableViewDataSource, UI
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
+    var exportFileURL = NSURL()
+    var exportFiles = [NSURL]()
+    
     func exportCSVFile(drive: Drive) {
-//                
-//        // 1
-//        var fetchRequestError: NSError? = nil
-//        let results = coreDataStack.context.executeFetchRequest(
-//            self.surfJournalFetchRequest(),
-//            error: &fetchRequestError)
-//        if results == nil {
-//            println("ERROR: \(fetchRequestError)")
-//        }
-//        
-//        // 2
-//        let exportFilePath =
-//        NSTemporaryDirectory() + "export.csv"
-//        let exportFileURL =
-//        NSURL(fileURLWithPath: exportFilePath)!
-//        NSFileManager.defaultManager().createFileAtPath(
-//            exportFilePath, contents: NSData(), attributes: nil)
-//        
-//        // 3
-//        var fileHandleError: NSError? = nil
-//        let fileHandle = NSFileHandle(forWritingToURL: exportFileURL,
-//            error: &fileHandleError)
-//        if let fileHandle = fileHandle {
-//            
-//            // 4
-//            for object in results! {
+        
+        // 2
+        let exportFilePath =
+        NSTemporaryDirectory() + "export.csv"
+        exportFileURL =
+        NSURL(fileURLWithPath: exportFilePath)!
+        NSFileManager.defaultManager().createFileAtPath(
+            exportFilePath, contents: NSData(), attributes: nil)
+        
+        // 3
+        var fileHandleError: NSError? = nil
+        let fileHandle = NSFileHandle(forWritingToURL: exportFileURL,
+            error: &fileHandleError)
+        if let fileHandle = fileHandle {
+            
+            // 4
+//            for turn in
+//            for turn in results! {
 //                let journalEntry = object as! JournalEntry
 //                
 //                fileHandle.seekToEndOfFile()
-//                let csvData = journalEntry.csv().dataUsingEncoding(
-//                    NSUTF8StringEncoding, allowLossyConversion: false)
-//                fileHandle.writeData(csvData!)
+                let csvData = drive.csv().dataUsingEncoding(
+                    NSUTF8StringEncoding, allowLossyConversion: false)
+                fileHandle.writeData(csvData!)
 //            }
-//            
-//            // 5
-//            fileHandle.closeFile()
-//            
-//            println("Export Path: \(exportFilePath)")
-//            self.navigationItem.leftBarButtonItem =
-//                self.exportBarButtonItem()
-//            self.showExportFinishedAlertView(exportFilePath)
-//            
-//        } else {
-//            println("ERROR: \(fileHandleError)")
-//            self.navigationItem.leftBarButtonItem =
-//                self.exportBarButtonItem()
-//        }
-//        
+            
+            // 5
+            fileHandle.closeFile()
+            
+            println("Export Path: \(exportFilePath)")
+        
+        } else {
+            println("ERROR: \(fileHandleError)")
+        }
+        exportFiles.append(exportFileURL)
+        
+    }
+
+    @IBAction func shareButtonClicked(sender: AnyObject) {        
+        for drive in drives {
+            let tempDrive = drive as! Drive
+            if tempDrive.selected {
+                exportCSVFile(drive as! Drive)
+            }
+        }
+        let textToShare = "Exported Drive Data"
+        var objectsToShare = [AnyObject]()
+        objectsToShare.append(textToShare)
+        for exportFile in exportFiles {
+            objectsToShare.append(exportFile)
+        }
+        let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+        
+        self.presentViewController(activityVC, animated: true, completion: nil)
+        
+    }
+    
+    override func prepareForSegue(segue: "Map Segue", sender: AnyObject?) {
+        if segue.identifier == "Map Segue" {
+            let navVC = segue.destinationViewController as! UINavigationController
+            let mapVC = navVC.viewControllers.first as! DriveTableViewController
+            mapVC.locations = drives[0].valueForKey("locations")
+        }
     }
 
     

@@ -24,7 +24,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
         if let location = locations.first as? CLLocation {
-            // self.locations.append(location)
+            self.locations.append(location)
         }
     }
 }

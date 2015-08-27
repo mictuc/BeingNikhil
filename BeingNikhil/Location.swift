@@ -11,6 +11,6 @@ import CoreData
 class Location: NSManagedObject {
 
     @NSManaged var location: AnyObject
-    @NSManaged var drive: Drive
+    //@NSManaged var drive: Drive
 
 }

@@ -109,7 +109,11 @@ class MotionManager: NSObject {
                 turn.endTime = NSDate()
                 turn.duration = NSDate().timeIntervalSinceDate(turn.startTime)
                 turn.endLocation = sharedLocation.locations[sharedLocation.locations.endIndex - 1]
-                //drive.turnCount = self.turnCount
+                var error: NSError?
+                if !managedObjectContext.save(&error) {
+                    println("Could not save \(error), \(error?.userInfo)")
+                }  
+
                 updateDTW()
             }
         }
@@ -140,7 +144,6 @@ class MotionManager: NSObject {
 //        let subject = managedObjectContext.objectWithID(subjectID) as! Subject
 //        drive.setValue(subject, forKey: "subject")
         for turn in turnArray {
-//            let motion = NSEntityDescription.insertNewObjectForEntityForName("Motion", inManagedObjectContext: managedObjectContext) as! Motion
             turn.drive = managedObjectContext.objectWithID(drive.objectID) as! Drive
         }
     }
@@ -201,9 +204,13 @@ class MotionManager: NSObject {
     
     func stopMonitoringDeviceMotion() {
         sharedLocation.manager.stopUpdatingLocation()
-        
+        drive.locations = sharedLocation.locations
         if manager.deviceMotionAvailable {
             manager.stopDeviceMotionUpdates()
+        }
+        var error: NSError?
+        if !managedObjectContext.save(&error) {
+            println("Could not save \(error), \(error?.userInfo)")
         }
         if mode == Mode.Store {
             storeDeviceMotionData()

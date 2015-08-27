@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="b0f-MK-Q5s">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="b0f-MK-Q5s">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
@@ -43,11 +43,12 @@
                     <navigationItem key="navigationItem" id="q42-AY-Ked">
                         <nil key="title"/>
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="fH2-DI-Hta">
-                            <rect key="frame" x="193" y="7" width="215" height="31"/>
+                            <rect key="frame" x="142" y="7" width="317" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <segments>
-                                <segment title="Store Template"/>
-                                <segment title="Match Driving"/>
+                                <segment title="RECORD"/>
+                                <segment title="COMPARE"/>
+                                <segment title="EXPORT"/>
                             </segments>
                             <connections>
                                 <action selector="modeType:" destination="0E3-uC-DAy" eventType="valueChanged" id="k6i-gj-Ax4"/>
@@ -130,6 +131,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <toolbar key="tableFooterView" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="jIS-ft-kNN">
+                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                            <items>
+                                <barButtonItem systemItem="compose" id="sIs-7C-0PM">
+                                    <color key="tintColor" red="0.0" green="1" blue="0.16471141916712284" alpha="1" colorSpace="calibratedRGB"/>
+                                    <connections>
+                                        <segue destination="eqQ-8b-OZM" kind="show" id="teZ-MG-FDH"/>
+                                    </connections>
+                                </barButtonItem>
+                            </items>
+                        </toolbar>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" textLabel="tHg-5j-hWg" detailTextLabel="rcu-o1-oks" style="IBUITableViewCellStyleSubtitle" id="XPm-xr-VLh">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
@@ -158,9 +171,16 @@
                             <outlet property="delegate" destination="u4c-fk-7O7" id="7hj-2V-Rrl"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="yEY-ZN-36L"/>
+                    <navigationItem key="navigationItem" id="yEY-ZN-36L">
+                        <barButtonItem key="rightBarButtonItem" systemItem="action" id="frD-1Y-w6A">
+                            <connections>
+                                <action selector="shareButtonClicked:" destination="u4c-fk-7O7" id="cI7-6h-dY8"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="DriveView" destination="H4W-hE-ScR" id="6v3-n6-0X1"/>
+                        <outlet property="shareButton" destination="frD-1Y-w6A" id="8ni-FW-3Wj"/>
                         <segue destination="iPS-wN-ZJe" kind="unwind" identifier="unwindSegue" unwindAction="unwindToVC:" id="Ph3-g9-hY4"/>
                     </connections>
                 </tableViewController>
@@ -168,6 +188,30 @@
                 <exit id="iPS-wN-ZJe" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="3337" y="2210"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="Bce-q5-vxU">
+            <objects>
+                <viewController id="aLF-Zp-QWd" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="eqD-BH-ofc"/>
+                        <viewControllerLayoutGuide type="bottom" id="OPh-cy-x2E"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="4wi-xQ-JKW">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="JBj-eB-3wA">
+                                <rect key="frame" x="0.0" y="64" width="600" height="600"/>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="3nD-2P-86g"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YC0-fS-PLN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3337" y="2956"/>
         </scene>
         <!--Subject Menu-->
         <scene sceneID="gsS-l2-Zj6">
@@ -298,6 +342,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IaC-3q-P5Z" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2561" y="2210"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Xfr-ex-9C8">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="eqQ-8b-OZM" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ZQF-hB-LLS">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="aLF-Zp-QWd" kind="relationship" relationship="rootViewController" id="PqG-hM-PBD"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="y20-zj-MM9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2561" y="2956"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>

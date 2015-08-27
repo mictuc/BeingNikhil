@@ -13,6 +13,9 @@
 		087F2D561B869A800066833E /* DriveTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F2D551B869A800066833E /* DriveTableViewController.swift */; };
 		08A9C16A1B83FB7600747B40 /* RouteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A9C1691B83FB7600747B40 /* RouteTableViewController.swift */; };
 		08C794491B864F3A004F4AF7 /* Turn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C794481B864F3A004F4AF7 /* Turn.swift */; };
+		78D697F41B8FCF11007FEB52 /* Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D697F31B8FCF11007FEB52 /* Template.swift */; };
+		78D697F61B8FCFE9007FEB52 /* ViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D697F51B8FCFE9007FEB52 /* ViewManager.swift */; };
+		78D697F81B8FD97D007FEB52 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D697F71B8FD97D007FEB52 /* MapView.swift */; };
 		C8451DA81B02547C0001D730 /* SegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8451DA71B02547C0001D730 /* SegmentedControl.swift */; };
 		C8451DAC1B0259760001D730 /* Drive.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8451DAB1B0259760001D730 /* Drive.swift */; };
 		C8451DAE1B0259770001D730 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8451DAD1B0259770001D730 /* Location.swift */; };
@@ -47,6 +50,9 @@
 		0892DF741B8D3AF0000E1790 /* BeingNikhil 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "BeingNikhil 3.xcdatamodel"; sourceTree = "<group>"; };
 		08A9C1691B83FB7600747B40 /* RouteTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteTableViewController.swift; sourceTree = "<group>"; };
 		08C794481B864F3A004F4AF7 /* Turn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Turn.swift; sourceTree = "<group>"; };
+		78D697F31B8FCF11007FEB52 /* Template.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Template.swift; sourceTree = "<group>"; };
+		78D697F51B8FCFE9007FEB52 /* ViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewManager.swift; sourceTree = "<group>"; };
+		78D697F71B8FD97D007FEB52 /* MapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		C8451DA71B02547C0001D730 /* SegmentedControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentedControl.swift; sourceTree = "<group>"; };
 		C8451DAB1B0259760001D730 /* Drive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Drive.swift; sourceTree = "<group>"; };
 		C8451DAD1B0259770001D730 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
@@ -92,6 +98,7 @@
 				08C794481B864F3A004F4AF7 /* Turn.swift */,
 				087F2D4F1B8693EE0066833E /* Route.swift */,
 				087F2D511B8693F70066833E /* Subject.swift */,
+				78D697F31B8FCF11007FEB52 /* Template.swift */,
 			);
 			name = "Data Model";
 			sourceTree = "<group>";
@@ -110,6 +117,7 @@
 			children = (
 				C8DA67C81AF4C6D3001D9F37 /* LocationManager.swift */,
 				C8DA67C61AF4C6C6001D9F37 /* MotionManager.swift */,
+				78D697F51B8FCFE9007FEB52 /* ViewManager.swift */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -140,6 +148,7 @@
 				08A9C1691B83FB7600747B40 /* RouteTableViewController.swift */,
 				087F2D531B869A000066833E /* SubjectTableViewController.swift */,
 				087F2D551B869A800066833E /* DriveTableViewController.swift */,
+				78D697F71B8FD97D007FEB52 /* MapView.swift */,
 				C8DA67AA1AF4C1A7001D9F37 /* Main.storyboard */,
 				C8451DB11B025A340001D730 /* Managers */,
 				C8451DB01B0259DF0001D730 /* Extensions */,
@@ -228,7 +237,7 @@
 				TargetAttributes = {
 					C8DA679D1AF4C1A7001D9F37 = {
 						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = S684H5P75Z;
+						DevelopmentTeam = NDS275F57N;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -293,10 +302,13 @@
 				087F2D521B8693F70066833E /* Subject.swift in Sources */,
 				C8451DA81B02547C0001D730 /* SegmentedControl.swift in Sources */,
 				C8451DAE1B0259770001D730 /* Location.swift in Sources */,
+				78D697F41B8FCF11007FEB52 /* Template.swift in Sources */,
 				C8DA67A71AF4C1A7001D9F37 /* BeingNikhil.xcdatamodeld in Sources */,
+				78D697F81B8FD97D007FEB52 /* MapView.swift in Sources */,
 				C8451DAC1B0259760001D730 /* Drive.swift in Sources */,
 				08A9C16A1B83FB7600747B40 /* RouteTableViewController.swift in Sources */,
 				C8DA67C91AF4C6D3001D9F37 /* LocationManager.swift in Sources */,
+				78D697F61B8FCFE9007FEB52 /* ViewManager.swift in Sources */,
 				C8DA67A41AF4C1A7001D9F37 /* AppDelegate.swift in Sources */,
 				C8D893A81AF9D072006DDF2C /* ReferenceFrame.swift in Sources */,
 				087F2D501B8693EE0066833E /* Route.swift in Sources */,
