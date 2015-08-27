@@ -80,6 +80,7 @@ class MotionManager: NSObject {
     var priorRotationRatesInTurn = [Double](count: 1, repeatedValue: 0)
     var turnCount = 0
     var turnArray = [Turn]()
+    lazy var turn = Turn()
     
     func detectDeviceRotationEndpoints(z: Double) {
         updateSimpleMovingAverageOfRotationalEnergy(z)
@@ -89,12 +90,15 @@ class MotionManager: NSObject {
             if priorSMA <= tU {
                 turnCount++
                 rotationRatesInTurn = rotationRates
+                turn = NSEntityDescription.insertNewObjectForEntityForName("Turn", inManagedObjectContext: managedObjectContext) as! Turn
+                turn.startLocation = sharedLocation.locations[sharedLocation.locations.endIndex - 1]
+                turn.startTime = NSDate()
             } else {
                 rotationRatesInTurn.append(z)
             }
         } else if SMA < tL {
             if priorSMA >= tL {
-                let turn = NSEntityDescription.insertNewObjectForEntityForName("Turn", inManagedObjectContext: managedObjectContext) as! Turn
+                //let turn = NSEntityDescription.insertNewObjectForEntityForName("Turn", inManagedObjectContext: managedObjectContext) as! Turn
                 dynamicTimeWarping(priorRotationRatesInTurn, t: rotationRatesInTurn)
                 priorRotationRatesInTurn = rotationRatesInTurn
                 turn.sensorData = priorRotationRatesInTurn
@@ -102,6 +106,9 @@ class MotionManager: NSObject {
                 turn.dataString = priorRotationRatesInTurn.description
                 turnArray.append(turn)
                 turn.drive = drive
+                turn.endTime = NSDate()
+                turn.duration = NSDate().timeIntervalSinceDate(turn.startTime)
+                turn.endLocation = sharedLocation.locations[sharedLocation.locations.endIndex - 1]
                 //drive.turnCount = self.turnCount
                 updateDTW()
             }

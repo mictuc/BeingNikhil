@@ -153,19 +153,71 @@ class DriveTableViewController: UITableViewController, UITableViewDataSource, UI
         }else{
             cell!.accessoryType = UITableViewCellAccessoryType.Checkmark
             drive.selected = true
-            
-            let csvAlert = UIAlertController(title: "Enter Subject Name", message: drive.csv(), preferredStyle: .Alert)
-            
-            csvAlert.addAction(UIAlertAction(title: "Ok",style: .Default,
-                handler: { (action) -> Void in
-            }))
-            
-            self.presentViewController(csvAlert,
-                animated: true,
-                completion: nil)
+            exportCSVFile(drive)
+//            let csvAlert = UIAlertController(title: "Enter Subject Name", message: drive.csv(), preferredStyle: .Alert)
+//            
+//            csvAlert.addAction(UIAlertAction(title: "Ok",style: .Default,
+//                handler: { (action) -> Void in
+//            }))
+//            
+//            self.presentViewController(csvAlert,
+//                animated: true,
+//                completion: nil)
         }
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
+    
+    func exportCSVFile(drive: Drive) {
+//                
+//        // 1
+//        var fetchRequestError: NSError? = nil
+//        let results = coreDataStack.context.executeFetchRequest(
+//            self.surfJournalFetchRequest(),
+//            error: &fetchRequestError)
+//        if results == nil {
+//            println("ERROR: \(fetchRequestError)")
+//        }
+//        
+//        // 2
+//        let exportFilePath =
+//        NSTemporaryDirectory() + "export.csv"
+//        let exportFileURL =
+//        NSURL(fileURLWithPath: exportFilePath)!
+//        NSFileManager.defaultManager().createFileAtPath(
+//            exportFilePath, contents: NSData(), attributes: nil)
+//        
+//        // 3
+//        var fileHandleError: NSError? = nil
+//        let fileHandle = NSFileHandle(forWritingToURL: exportFileURL,
+//            error: &fileHandleError)
+//        if let fileHandle = fileHandle {
+//            
+//            // 4
+//            for object in results! {
+//                let journalEntry = object as! JournalEntry
+//                
+//                fileHandle.seekToEndOfFile()
+//                let csvData = journalEntry.csv().dataUsingEncoding(
+//                    NSUTF8StringEncoding, allowLossyConversion: false)
+//                fileHandle.writeData(csvData!)
+//            }
+//            
+//            // 5
+//            fileHandle.closeFile()
+//            
+//            println("Export Path: \(exportFilePath)")
+//            self.navigationItem.leftBarButtonItem =
+//                self.exportBarButtonItem()
+//            self.showExportFinishedAlertView(exportFilePath)
+//            
+//        } else {
+//            println("ERROR: \(fileHandleError)")
+//            self.navigationItem.leftBarButtonItem =
+//                self.exportBarButtonItem()
+//        }
+//        
+    }
+
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

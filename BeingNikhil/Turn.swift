@@ -14,5 +14,14 @@ class Turn: NSManagedObject {
     @NSManaged var drive: Drive
     @NSManaged var turnNumber: NSNumber
     @NSManaged var dataString: String
+    @NSManaged var startTime: NSDate
+    @NSManaged var endTime: NSDate
+    @NSManaged var duration: NSNumber
+    @NSManaged var startLocation: AnyObject
+    @NSManaged var endLocation: AnyObject
+    
+    func csv() {
+        
+    }
     
 }
