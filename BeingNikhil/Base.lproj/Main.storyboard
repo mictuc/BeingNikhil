@@ -138,7 +138,7 @@
                                 <barButtonItem systemItem="compose" id="sIs-7C-0PM">
                                     <color key="tintColor" red="0.0" green="1" blue="0.16471141916712284" alpha="1" colorSpace="calibratedRGB"/>
                                     <connections>
-                                        <segue destination="eqQ-8b-OZM" kind="show" id="teZ-MG-FDH"/>
+                                        <segue destination="eqQ-8b-OZM" kind="show" identifier="Map Segue" id="teZ-MG-FDH"/>
                                     </connections>
                                 </barButtonItem>
                             </items>

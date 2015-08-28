@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import CoreLocation
 
 class DriveTableViewController: UITableViewController, UITableViewDataSource, UITableViewDelegate{
     @IBOutlet weak var shareButton: UIBarButtonItem!
@@ -18,6 +19,7 @@ class DriveTableViewController: UITableViewController, UITableViewDataSource, UI
     var drives = [NSManagedObject]()
     var subjectID = NSManagedObjectID()
     var unwindSegueID = "unwindSegue"
+    var mapSegue = "Map Segue"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -184,11 +186,11 @@ class DriveTableViewController: UITableViewController, UITableViewDataSource, UI
         
     }
     
-    override func prepareForSegue(segue: "Map Segue", sender: AnyObject?) {
-        if segue.identifier == "Map Segue" {
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == mapSegue {
             let navVC = segue.destinationViewController as! UINavigationController
-            let mapVC = navVC.viewControllers.first as! DriveTableViewController
-            mapVC.locations = drives[0].valueForKey("locations")
+            let mapVC = navVC.viewControllers.first as! MapView
+            mapVC.locations = drives[0].valueForKey("locations") as! [(CLLocation)]
         }
     }
 
