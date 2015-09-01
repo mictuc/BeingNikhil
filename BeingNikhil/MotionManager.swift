@@ -130,22 +130,28 @@ class MotionManager: NSObject {
         let appDelegate =
         UIApplication.sharedApplication().delegate as! AppDelegate
         let managedContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext!
-//        let entity =  NSEntityDescription.entityForName("Drive", inManagedObjectContext: managedContext)
-//        drive = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
-//        drive.setValue(startMonitoringDate, forKey: "timestamp")
-//        drive.setValue(NSDate().timeIntervalSinceDate(startMonitoringDate), forKey: "duration")
-//        drive.setValue(false, forKey: "selected")
-//        drive.setValue(turnCount, forKey: "turnCount")
-
         drive.timestamp = startMonitoringDate
         drive.duration = NSDate().timeIntervalSinceDate(startMonitoringDate)
         drive.selected = false
+        var error: NSError?
+        if !managedObjectContext.save(&error) {
+            println("Could not save \(error), \(error?.userInfo)")
+        }
+
+        
         //drive.turnCount = turnCount
 //        let subject = managedObjectContext.objectWithID(subjectID) as! Subject
 //        drive.setValue(subject, forKey: "subject")
-        for turn in turnArray {
-            turn.drive = managedObjectContext.objectWithID(drive.objectID) as! Drive
-        }
+//        for turn in turnArray {
+//            turn.drive = managedObjectContext.objectWithID(drive.objectID) as! Drive
+//        }
+        //        let entity =  NSEntityDescription.entityForName("Drive", inManagedObjectContext: managedContext)
+        //        drive = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
+        //        drive.setValue(startMonitoringDate, forKey: "timestamp")
+        //        drive.setValue(NSDate().timeIntervalSinceDate(startMonitoringDate), forKey: "duration")
+        //        drive.setValue(false, forKey: "selected")
+        //        drive.setValue(turnCount, forKey: "turnCount")
+
     }
     
     func printDeviceMotionData() {
@@ -208,14 +214,14 @@ class MotionManager: NSObject {
         if manager.deviceMotionAvailable {
             manager.stopDeviceMotionUpdates()
         }
-        var error: NSError?
-        if !managedObjectContext.save(&error) {
-            println("Could not save \(error), \(error?.userInfo)")
-        }
         if mode == Mode.Store {
             storeDeviceMotionData()
         } else {
             compareDrives()
+        }
+        var error: NSError?
+        if !managedObjectContext.save(&error) {
+            println("Could not save \(error), \(error?.userInfo)")
         }
         printDeviceMotionData()
     }

@@ -12,6 +12,8 @@ class Template: NSManagedObject {
     
     @NSManaged var name: String
     @NSManaged var drives: NSOrderedSet
-    
+    @NSManaged var route: Route
+    @NSManaged var subject: Subject
+    @NSManaged var selected: Bool
     
 }

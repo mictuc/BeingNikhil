@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreData
 
 class ViewManager: NSObject {
     enum Mode {
@@ -17,6 +18,8 @@ class ViewManager: NSObject {
     var mode = Mode.Record
 
     var storeDrive = false
+    
+    var routeID = NSManagedObjectID()
 }
 
 let sharedView = ViewManager()

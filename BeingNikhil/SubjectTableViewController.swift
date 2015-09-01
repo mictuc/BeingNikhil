@@ -73,20 +73,27 @@ class SubjectTableViewController: UITableViewController, UITableViewDataSource, 
 
             let drives = subjectToDelete.drives
             for drive in drives {
-                let tempDrive = drive as! Drive
-                let turns = tempDrive.turns
+                let driveToDelete = drive as! Drive
+                let turns = driveToDelete.turns
                 for turn in turns {
                     managedObjectContext?.deleteObject(turn as! NSManagedObject)
                 }
-//                let locations = tempDrive.locations
-//                for location in locations {
-//                    managedObjectContext?.deleteObject(location as! NSManagedObject)
-//                }
+                let templates = driveToDelete.templates
+                for template in templates {
+                    managedObjectContext?.deleteObject(template as! NSManagedObject)
+                }
+                
                 managedObjectContext?.deleteObject(drive as! NSManagedObject)
             }
             
             // Delete it from the managedObjectContext
             managedObjectContext?.deleteObject(subjectToDelete)
+            
+            let managedContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext!
+            var error: NSError?
+            if !managedContext.save(&error) {
+                println("Could not save \(error), \(error?.userInfo)")
+            }
             
             // Refresh the table view to indicate that it's deleted
             self.fetchSubject()
@@ -107,6 +114,7 @@ class SubjectTableViewController: UITableViewController, UITableViewDataSource, 
             //sharedMotion.drive.setValue(subject, forKey: "subject")
             performSegueWithIdentifier(unwindSegueIdentifier, sender: cell)
         } else {
+            println("subject segue called")
             performSegueWithIdentifier(subjectSegueIdentifier, sender: cell)
         }
     }
@@ -164,14 +172,16 @@ class SubjectTableViewController: UITableViewController, UITableViewDataSource, 
         let entity =  NSEntityDescription.entityForName("Subject", inManagedObjectContext: managedContext)
         let subject = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
         subject.setValue(title, forKey: "name")
+        let route = managedObjectContext!.objectWithID(routeID) as! Route
+        subject.setValue(route, forKey: "route")
         var error: NSError?
         if !managedContext.save(&error) {
             println("Could not save \(error), \(error?.userInfo)")
-        }  
-        let route = managedObjectContext!.objectWithID(routeID) as! Route
-        subject.setValue(route, forKey: "route")
+        }        
         subjects.append(subject)
         self.tableView.reloadData()
+        
+        
     }
 
 

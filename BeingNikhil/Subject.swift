@@ -14,6 +14,7 @@ class Subject: NSManagedObject {
     @NSManaged var numDrives: NSNumber
     @NSManaged var drives: NSOrderedSet
     @NSManaged var route: Route
+    @NSManaged var templates: NSOrderedSet
     
     
 }

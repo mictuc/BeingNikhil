@@ -13,6 +13,7 @@ class Route: NSManagedObject {
     @NSManaged var name: String
     @NSManaged var numSubjects: NSNumber
     @NSManaged var subjects: NSOrderedSet
+    @NSManaged var templates: NSOrderedSet
 
     
 }
