@@ -13,8 +13,11 @@ import CoreData
 /// A series of drives to which one can compare drives.
 class Template: NSManagedObject {
     
-    /// Drives used in the Template
+    /// Drives used in the template
     @NSManaged var drives: NSOrderedSet
+    
+    /// Scores for each drive used in template
+    @NSManaged var driveScores: String
 
     /// Name of the template
     @NSManaged var name: String

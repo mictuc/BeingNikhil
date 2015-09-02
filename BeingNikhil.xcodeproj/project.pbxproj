@@ -94,6 +94,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BBCB660F1B9765270017E789 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				C8DA67A81AF4C1A7001D9F37 /* MainViewController.swift */,
+				08A9C1691B83FB7600747B40 /* RouteTableViewController.swift */,
+				087F2D531B869A000066833E /* SubjectTableViewController.swift */,
+				087F2D551B869A800066833E /* DriveTableViewController.swift */,
+				BBBAB99B1B9501E800685054 /* TemplateTableViewController.swift */,
+				78D697F71B8FD97D007FEB52 /* MapViewController.swift */,
+				BB1C2B601B96208B007D5F11 /* TableViewSuperClass.swift */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
 		C8451DAF1B02598C0001D730 /* Data Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -148,20 +162,14 @@
 			isa = PBXGroup;
 			children = (
 				C8DA67A31AF4C1A7001D9F37 /* AppDelegate.swift */,
-				C8DA67A81AF4C1A7001D9F37 /* MainViewController.swift */,
-				08A9C1691B83FB7600747B40 /* RouteTableViewController.swift */,
-				087F2D531B869A000066833E /* SubjectTableViewController.swift */,
-				087F2D551B869A800066833E /* DriveTableViewController.swift */,
-				BBBAB99B1B9501E800685054 /* TemplateTableViewController.swift */,
-				78D697F71B8FD97D007FEB52 /* MapViewController.swift */,
-				BB1C2B601B96208B007D5F11 /* TableViewSuperClass.swift */,
 				C8DA67AA1AF4C1A7001D9F37 /* Main.storyboard */,
+				BBCB660F1B9765270017E789 /* View Controllers */,
 				C8451DB11B025A340001D730 /* Managers */,
 				C8451DB01B0259DF0001D730 /* Extensions */,
-				C8DA67AD1AF4C1A7001D9F37 /* Images.xcassets */,
-				C8DA67AF1AF4C1A7001D9F37 /* LaunchScreen.xib */,
 				C8DA67A51AF4C1A7001D9F37 /* BeingNikhil.xcdatamodeld */,
 				C8451DAF1B02598C0001D730 /* Data Model */,
+				C8DA67AF1AF4C1A7001D9F37 /* LaunchScreen.xib */,
+				C8DA67AD1AF4C1A7001D9F37 /* Images.xcassets */,
 				C8DA67A11AF4C1A7001D9F37 /* Supporting Files */,
 			);
 			path = BeingNikhil;

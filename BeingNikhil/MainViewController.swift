@@ -2,7 +2,8 @@
 //  ViewController.swift
 //  BeingNikhil
 //
-//  Main view controller for the app
+//  This is the main view controller for the being Nikhil App
+//  Displays map, can record drives, and access data
 //
 //  Created by David M Sirkin on 5/2/15.
 //  Revised by Michael P Tucker on 9/1/15.
@@ -27,7 +28,6 @@ class MainViewController: UIViewController {
     /// Monitoring device motion
     var monitor = false
     
-    
     /**
         Initialization of the ViewController Class
     */
@@ -51,7 +51,6 @@ class MainViewController: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateDTW:", name: "DTW", object: nil)
     }
     
-    
     /**
         Controls the start and stop of drive monitoring
     */
@@ -69,7 +68,6 @@ class MainViewController: UIViewController {
         }
     }
     
-    
     /**
     Updates the DTW label in the Main View Controller
     
@@ -78,7 +76,6 @@ class MainViewController: UIViewController {
     func updateDTW(notification: NSNotification) {
         labelDTW.text = String(format: "DTW: %.2f", sharedMotion.DTW)
     }
-    
 
     /**
         Controls toggle switch for the app mode
@@ -98,7 +95,6 @@ class MainViewController: UIViewController {
         }
     }
     
-    
     /**
         Controls toggle switch for the map view
         
@@ -117,7 +113,6 @@ class MainViewController: UIViewController {
         }
     }
     
-    
     /**
     Determines whether or not the user is storing a drive or not
     
@@ -131,7 +126,6 @@ class MainViewController: UIViewController {
             sharedView.storeDrive = false
         }
     }
-    
     
     /**
     Unwind segue back to view controller

@@ -141,7 +141,7 @@
                                 <barButtonItem style="plain" systemItem="flexibleSpace" id="dvw-v8-ZJK"/>
                                 <barButtonItem title="Item" id="xr3-rt-Dn3">
                                     <connections>
-                                        <action selector="startSegue:" destination="u4c-fk-7O7" id="WtH-Mq-EIk"/>
+                                        <action selector="compareButtonPressed:" destination="u4c-fk-7O7" id="PO5-ym-wgO"/>
                                     </connections>
                                 </barButtonItem>
                             </items>

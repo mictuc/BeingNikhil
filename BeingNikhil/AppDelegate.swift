@@ -2,6 +2,9 @@
 //  AppDelegate.swift
 //  BeingNikhil
 //
+//  Main app delegate for the Being Nikhil App
+//  Primarily used to store core data objects
+//
 //  Created by David M Sirkin on 5/2/15.
 //  Copyright (c) 2015 Stanford University. All rights reserved.
 //

@@ -21,6 +21,7 @@
         <relationship name="templates" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Template" inverseName="subject" inverseEntity="Template" syncable="YES"/>
     </entity>
     <entity name="Template" representedClassName="BeingNikhil.Template" syncable="YES">
+        <attribute name="driveScores" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="selected" optional="YES" attributeType="Boolean" syncable="YES"/>
         <relationship name="drives" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Drive" inverseName="templates" inverseEntity="Drive" syncable="YES"/>
@@ -42,7 +43,7 @@
         <element name="Drive" positionX="-63" positionY="-18" width="128" height="150"/>
         <element name="Route" positionX="-45" positionY="45" width="128" height="90"/>
         <element name="Subject" positionX="-36" positionY="54" width="128" height="105"/>
-        <element name="Template" positionX="-45" positionY="90" width="128" height="120"/>
+        <element name="Template" positionX="-45" positionY="90" width="128" height="135"/>
         <element name="Turn" positionX="-36" positionY="45" width="128" height="180"/>
     </elements>
 </model>
