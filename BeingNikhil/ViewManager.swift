@@ -2,7 +2,7 @@
 //  ViewManager.swift
 //  BeingNikhil
 //
-//  Created by DesignX Lab2 on 8/27/15.
+//  Created by Michael P Tucker on 8/27/15.
 //  Copyright (c) 2015 Stanford University. All rights reserved.
 //
 
@@ -20,6 +20,8 @@ class ViewManager: NSObject {
     var storeDrive = false
     
     var routeID = NSManagedObjectID()
+    
+    var subjectID = NSManagedObjectID()
 }
 
 let sharedView = ViewManager()

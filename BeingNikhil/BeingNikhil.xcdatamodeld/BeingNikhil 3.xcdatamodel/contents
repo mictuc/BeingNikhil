@@ -11,13 +11,11 @@
     </entity>
     <entity name="Route" representedClassName="BeingNikhil.Route" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="numSubjects" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="subjects" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Subject" inverseName="route" inverseEntity="Subject" syncable="YES"/>
         <relationship name="templates" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Template" inverseName="route" inverseEntity="Template" syncable="YES"/>
     </entity>
     <entity name="Subject" representedClassName="BeingNikhil.Subject" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="numDrives" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="drives" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Drive" inverseName="subject" inverseEntity="Drive" syncable="YES"/>
         <relationship name="route" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Route" inverseName="subjects" inverseEntity="Route" syncable="YES"/>
         <relationship name="templates" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Template" inverseName="subject" inverseEntity="Template" syncable="YES"/>
@@ -42,8 +40,8 @@
     </entity>
     <elements>
         <element name="Drive" positionX="-63" positionY="-18" width="128" height="150"/>
-        <element name="Route" positionX="-45" positionY="45" width="128" height="105"/>
-        <element name="Subject" positionX="-36" positionY="54" width="128" height="120"/>
+        <element name="Route" positionX="-45" positionY="45" width="128" height="90"/>
+        <element name="Subject" positionX="-36" positionY="54" width="128" height="105"/>
         <element name="Template" positionX="-45" positionY="90" width="128" height="120"/>
         <element name="Turn" positionX="-36" positionY="45" width="128" height="180"/>
     </elements>

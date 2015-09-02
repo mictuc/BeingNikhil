@@ -4,10 +4,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Main View Controller-->
         <scene sceneID="1jX-7x-YGN">
             <objects>
-                <viewController storyboardIdentifier="MapView" id="0E3-uC-DAy" customClass="ViewController" customModule="BeingNikhil" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MapView" id="0E3-uC-DAy" customClass="MainViewController" customModule="BeingNikhil" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="36K-TF-Dre"/>
                         <viewControllerLayoutGuide type="bottom" id="Iwj-Ef-3kf"/>
@@ -61,7 +61,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="label" destination="24D-5D-raj" id="VFW-h9-sZ0"/>
+                        <outlet property="labelDTW" destination="24D-5D-raj" id="74O-zH-EhQ"/>
                         <outlet property="mapView" destination="BqA-0o-tnx" id="lgn-L8-mL7"/>
                         <segue destination="YWn-jR-sBv" kind="show" identifier="storeDriveSegue" id="OHC-kM-Aef"/>
                     </connections>
@@ -114,9 +114,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="routeView" destination="y2a-r3-jry" id="r92-P2-oY0"/>
-                        <outlet property="tableView" destination="y2a-r3-jry" id="N0e-Jd-WfX"/>
-                        <segue destination="8EQ-An-Vhm" kind="show" identifier="routeSegue" id="Hzd-mF-wWa"/>
+                        <segue destination="8EQ-An-Vhm" kind="show" identifier="subjectSegue" id="Hzd-mF-wWa"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ijg-gK-LTR" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -265,8 +263,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="subjectView" destination="yAE-gS-TLv" id="4TC-l3-fsM"/>
-                        <segue destination="VMY-RL-r2k" kind="show" identifier="subjectSegue" id="bin-FR-TSq"/>
+                        <segue destination="VMY-RL-r2k" kind="show" identifier="driveSegue" id="bin-FR-TSq"/>
                         <segue destination="TaN-eG-LlR" kind="unwind" identifier="unwindSegue" unwindAction="unwindToVC:" id="wcE-gU-ofh"/>
                     </connections>
                 </tableViewController>
@@ -430,6 +427,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="b1V-pR-k9b"/>
+        <segue reference="OHC-kM-Aef"/>
     </inferredMetricsTieBreakers>
 </document>

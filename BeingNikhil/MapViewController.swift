@@ -18,6 +18,7 @@ class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        locations = sharedLocation.locations
         title = routeName
         let centerLongitude = (locations[0].coordinate.longitude + locations[locations.count/2].coordinate.longitude) / 2
         let centerLatitude = (locations[0].coordinate.latitude + locations[locations.count/2].coordinate.latitude) / 2
@@ -41,9 +42,4 @@ class MapViewController: UIViewController {
         mapView.addOverlay(myPolyline)
     }
 
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
 }

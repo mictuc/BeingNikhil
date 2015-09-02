@@ -2,28 +2,51 @@
 //  Turn.swift
 //  BeingNikhil
 //
-//  Created by DesignX Lab2 on 8/20/15.
+//  Turn core data object
+//
+//  Created by Michael P Tucker on 8/20/15.
 //  Copyright (c) 2015 Stanford University. All rights reserved.
 //
 
 import CoreData
 
 class Turn: NSManagedObject {
-    
-    @NSManaged var sensorData: AnyObject
-    @NSManaged var drive: Drive
-    @NSManaged var turnNumber: NSNumber
+    /// Sensor data in a String format
     @NSManaged var dataString: String
-    @NSManaged var startTime: NSDate
-    @NSManaged var endTime: NSDate
+
+    /// Drive this turn was taken in
+    @NSManaged var drive: Drive
+
+    /// Duration of the turn in seconds
     @NSManaged var duration: NSNumber
-    @NSManaged var startLocation: AnyObject
-    @NSManaged var endLocation: AnyObject
+
+    /// Raw data from the gyroscopes and accelerometers
+    @NSManaged var sensorData: AnyObject
+
+    /// Turn number in drive
+    @NSManaged var turnNumber: NSNumber
     
+    /// Starting location of the turn
+    @NSManaged var startLocation: AnyObject
+
+    /// Ending location of the turn
+    @NSManaged var endLocation: AnyObject
+
+    /// Starting timestamp of the turn
+    @NSManaged var startTime: NSDate
+
+    /// Ending timestamp of the turn
+    @NSManaged var endTime: NSDate
+
+    
+    /**
+    Creates a csv–formatted String with the Turn's data
+    
+    :returns: String csv formatted data
+    */
     func csv() -> String {
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "h:mm:ss a"
-//                let coalescedTimestamp = dateFormatter.stringFromDate(timestamp)  ?? ""
         let coalescedTurnCount = turnNumber.stringValue
         let coalescedStartTime = dateFormatter.stringFromDate(startTime)
         let coalescedEndTime = dateFormatter.stringFromDate(endTime)

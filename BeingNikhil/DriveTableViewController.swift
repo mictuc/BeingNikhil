@@ -10,19 +10,16 @@ import UIKit
 import CoreData
 import CoreLocation
 
-class DriveTableViewController: UITableViewController, UITableViewDataSource, UITableViewDelegate{
+class DriveTableViewController: TableViewSuperClass, UITableViewDataSource, UITableViewDelegate{
     @IBOutlet var compareButton: UIBarButtonItem!
     
-    let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
-    
     var drives = [NSManagedObject]()
-    var subjectID = NSManagedObjectID()
     var mapSegue = "Map Segue"
     var templateSegueIdentifier = "templateSegue"
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let subject = managedObjectContext!.objectWithID(subjectID) as! Subject
+        let subject = managedObjectContext!.objectWithID(sharedView.subjectID) as! Subject
         title = subject.name + "'s Drives"
         
         if sharedView.mode == .Record {
@@ -31,23 +28,11 @@ class DriveTableViewController: UITableViewController, UITableViewDataSource, UI
             compareButton.title = "Compare to Template"
         }
         
-        fetchDrive()
+        fetchDrives()
     }
     
-    func fetchDrive() {
-        let subject = managedObjectContext!.objectWithID(subjectID) as! Subject
-        let predicate = NSPredicate(format: "subject == %@", subject)
-        let fetchRequest = NSFetchRequest(entityName: "Drive")
-        fetchRequest.predicate = predicate
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
-        if let fetchResults = managedObjectContext!.executeFetchRequest(fetchRequest, error: nil) as? [Drive] {
-            drives = fetchResults
-        }
-        println(drives.count)
-    }
-    
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return drives.count
+    func fetchDrives() {
+        drives = fetchCoreData("Drive", predicateDescription: "subject == %@", predicateObject: managedObjectContext!.objectWithID(sharedView.subjectID) as! Subject, sortAttribute: "timestamp")
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -62,35 +47,15 @@ class DriveTableViewController: UITableViewController, UITableViewDataSource, UI
         return cell
     }
     
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
-    
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if(editingStyle == .Delete ) {
             // Find the Drive object the user is trying to delete
-            let driveToDelete = drives[indexPath.row] as! Drive
-            
-            let turns = driveToDelete.turns
-            for turn in turns {
-                managedObjectContext?.deleteObject(turn as! NSManagedObject)
-            }
-            let templates = driveToDelete.templates
-            for template in templates {
-                managedObjectContext?.deleteObject(template as! NSManagedObject)
-            }
-            
-            // Delete it from the managedObjectContext
-            managedObjectContext?.deleteObject(driveToDelete)
-            
-            let managedContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext!
-            var error: NSError?
-            if !managedContext.save(&error) {
-                println("Could not save \(error), \(error?.userInfo)")
-            }
+            deleteDriveData(drives[indexPath.row] as! Drive)
+
+            appDelegate.saveContext()
             
             // Refresh the table view to indicate that it's deleted
-            self.fetchDrive()
+            self.fetchDrives()
             
             // Tell the table view to animate out that row
             self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
@@ -188,17 +153,17 @@ class DriveTableViewController: UITableViewController, UITableViewDataSource, UI
                         }
                     }
                     averageTurnDTW /= Double(drive.turns.count)
-//                    println(averageTurnDTW)
                     DTWSum += averageTurnDTW
                 }
             }
             templateScores.append(DTWSum / Double(templateDrives.count - 1))
         }
-//        println("finished comparison")
 
         var alertMessage = String()
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "MM-dd h:mm a"
         for i in 0...templateScores.count - 1{
-            alertMessage += "\(i+1): \(templateScores[i])\n"
+            alertMessage += "\(dateFormatter.stringFromDate(templateDrives[i].timestamp)): \(Double(round(1000 * templateScores[i]) / 1000))\n"
         }
         
         let testTemplateAlert = UIAlertController(title: "Template Scores", message: alertMessage, preferredStyle: .Alert)
@@ -209,59 +174,13 @@ class DriveTableViewController: UITableViewController, UITableViewDataSource, UI
         
         testTemplateAlert.addAction(UIAlertAction(title: "Make Template",style: .Default,
             handler: { (action) -> Void in
-                self.makeTemplateAlert(templateDrives)
+                let subject = self.managedObjectContext!.objectWithID(sharedView.subjectID) as! Subject
+                self.addEntity("Template", attributes: [subject, "subject", subject.route, "route"], relationships: templateDrives, relationshipType: "templates")
         }))
         
         self.presentViewController(testTemplateAlert,
             animated: true,
             completion: nil)
-    }
-    
-    func makeTemplateAlert(templateDrives: [Drive]) {
-        let namePrompt = UIAlertController(title: "Enter Template Name", message: nil, preferredStyle: .Alert)
-        var nameTextField: UITextField?
-        namePrompt.addTextFieldWithConfigurationHandler {
-            (textField) -> Void in
-            nameTextField = textField
-            textField.placeholder = "Name"
-        }
-        
-        namePrompt.addAction(UIAlertAction(title: "Cancel",style: .Default,
-            handler: { (action) -> Void in
-        }))
-        
-        namePrompt.addAction(UIAlertAction(title: "Ok",style: .Default,
-            handler: { (action) -> Void in
-                if let textField = nameTextField {
-                    self.saveNewTemplate(textField.text, templateDrives: templateDrives)
-                }
-        }))
-        
-        self.presentViewController(namePrompt,
-            animated: true,
-            completion: nil)
-
-    }
-    
-    func saveNewTemplate(name: String, templateDrives: [Drive]) {
-        println(name)
-        let appDelegate =
-        UIApplication.sharedApplication().delegate as! AppDelegate
-        let managedContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext!
-        println(managedContext)
-        let entity =  NSEntityDescription.entityForName("Template", inManagedObjectContext: managedContext)
-        let template = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
-        template.setValue(name, forKey: "name")
-        let subject = managedObjectContext!.objectWithID(subjectID) as! Subject
-        template.setValue(subject, forKey: "subject")
-        template.setValue(subject.route, forKey: "route")
-        for drive in templateDrives {
-            drive.addObject(template, forKey: "templates")
-        }
-        var error: NSError?
-        if !managedContext.save(&error) {
-            println("Could not save \(error), \(error?.userInfo)")
-        }        
     }
     
     @IBAction func startSegue(sender: AnyObject) {
@@ -274,19 +193,11 @@ class DriveTableViewController: UITableViewController, UITableViewDataSource, UI
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == mapSegue {
-            let navVC = segue.destinationViewController as! UINavigationController
-            let mapVC = navVC.viewControllers.first as! MapViewController
-            mapVC.locations = drives[0].valueForKey("locations") as! [(CLLocation)]
-            mapVC.routeName = drives[0].valueForKey("subject")?.valueForKey("Route")?.valueForKey("name") as! String
+            sharedLocation.locations = drives[0].valueForKey("locations") as! [(CLLocation)]
+            sharedView.routeID = drives[0].valueForKey("subject")!.valueForKey("Route")!.objectID
         } else if segue.identifier == templateSegueIdentifier {
-            let subject = managedObjectContext!.objectWithID(subjectID) as! Subject
+            let subject = managedObjectContext!.objectWithID(sharedView.subjectID) as! Subject
             sharedView.routeID = subject.route.objectID
         }
-    }
-
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 }

@@ -2,18 +2,31 @@
 //  Template.swift
 //  BeingNikhil
 //
-//  Created by DesignX Lab2 on 8/27/15.
+//  Template core data object
+//
+//  Created by Michael P Tucker on 8/27/15.
 //  Copyright (c) 2015 Stanford University. All rights reserved.
 //
 
 import CoreData
 
+/// A series of drives to which one can compare drives.
 class Template: NSManagedObject {
     
-    @NSManaged var name: String
+    /// Drives used in the Template
     @NSManaged var drives: NSOrderedSet
+
+    /// Name of the template
+    @NSManaged var name: String
+    
+    /// Route used by the template
     @NSManaged var route: Route
-    @NSManaged var subject: Subject
+    
+    /// Selected variable for tableView purposes
     @NSManaged var selected: Bool
+    
+    /// Subject who drove the drives in the template
+    @NSManaged var subject: Subject
+
     
 }

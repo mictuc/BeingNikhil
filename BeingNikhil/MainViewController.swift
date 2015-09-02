@@ -2,33 +2,40 @@
 //  ViewController.swift
 //  BeingNikhil
 //
+//  Main view controller for the app
+//
 //  Created by David M Sirkin on 5/2/15.
+//  Revised by Michael P Tucker on 9/1/15.
 //  Copyright (c) 2015 Stanford University. All rights reserved.
 //
 
 import UIKit
 import MapKit
-import CoreData
 
-class ViewController: UIViewController {
+/// Main View Controller for the app
+class MainViewController: UIViewController {
     
+    /// Map for the main view controller
     @IBOutlet var mapView: MKMapView!
-    @IBOutlet var label: UILabel!
-    let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
+    
+    /// Label to display DTW result
+    @IBOutlet var labelDTW: UILabel!
+    
+    /// ID for segue to store drives
     let storeDriveSegueIdentifier = "storeDriveSegue"
     
-    @IBOutlet weak var turnLabel: UILabel!
-    enum Mode {
-        case Store
-        case Match
-    }
-    var mode = Mode.Store
+    /// Monitoring device motion
     var monitor = false
     
+    
+    /**
+        Initialization of the ViewController Class
+    */
     override func viewDidLoad() {
         super.viewDidLoad()
-                
-        let locations = sharedLocation.locations
+        
+//        Display current path on Map?
+//        let locations = sharedLocation.locations
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Play, target: self, action: "monitorDeviceMotion")
         
@@ -41,38 +48,17 @@ class ViewController: UIViewController {
         
         toolbarItems?.insert(UIBarButtonItem(customView: segmentedControl as UIView), atIndex: 2)
         
-        //let button: AnyObject = UIButton.buttonWithType(.DetailDisclosure)
-        //button.addTarget(self, action: "displayAlertController:", forControlEvents: .TouchUpInside)
-        
-        //toolbarItems?.insert(UIBarButtonItem(customView: button as! UIView), atIndex: 2)
-        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateDTW:", name: "DTW", object: nil)
     }
-    /*
-    func displayAlertController(sender: AnyObject) {
-        let alertController = UIAlertController(title: "", message: "", preferredStyle: .ActionSheet)
-        
-        alertController.popoverPresentationController?.sourceView = sender as! UIView
-        alertController.addSegmentedControl(self, action: "mapType:")
-        
-        presentViewController(alertController, animated: true, completion: nil)
-    }
+    
+    
+    /**
+        Controls the start and stop of drive monitoring
     */
-    func updateDTW(notification: NSNotification) {
-        label.text = String(format: "DTW: %.2f", sharedMotion.DTW)
-    }
-    
-    func turnStarted(notification: NSNotification) {
-        turnLabel.text = "Turn Started"
-    }
-    
-    func turnEnded(notification: NSNotification) {
-        turnLabel.text = "Turn Ended"
-    }
-    
     func monitorDeviceMotion() {
         monitor = !monitor
         
+        /// If monitor is started, motion monitoring starts. When stopped, motion monitoring stops
         if monitor {
             sharedMotion.startMonitoringDeviceMotion()
             navigationItem.setLeftBarButtonItem(UIBarButtonItem(barButtonSystemItem: .Pause, target: self, action: "monitorDeviceMotion"), animated: true)
@@ -83,17 +69,22 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func unwindToVC(segue: UIStoryboardSegue) {
+    
+    /**
+    Updates the DTW label in the Main View Controller
+    
+    :param: notification to update
+    */
+    func updateDTW(notification: NSNotification) {
+        labelDTW.text = String(format: "DTW: %.2f", sharedMotion.DTW)
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
-        if (segue.identifier == "storeDriveSegue") {
-            sharedView.storeDrive = true
-        } else {
-            sharedView.storeDrive = false
-        }
-    }
+
+    /**
+        Controls toggle switch for the app mode
     
+        :param: UISegmentedControl Mode toggle button
+    */
     @IBAction func modeType(sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
@@ -107,6 +98,12 @@ class ViewController: UIViewController {
         }
     }
     
+    
+    /**
+        Controls toggle switch for the map view
+        
+        :param: UISegmentedControl Map type toggle button
+    */
     @IBAction func mapType(sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
@@ -119,6 +116,28 @@ class ViewController: UIViewController {
             break
         }
     }
+    
+    
+    /**
+    Determines whether or not the user is storing a drive or not
+    
+    :param: UIStoryboardSegue Segue about to perform
+    :param: AnyObject Sender for the segue
+    */
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+        if (segue.identifier == "storeDriveSegue") {
+            sharedView.storeDrive = true
+        } else {
+            sharedView.storeDrive = false
+        }
+    }
+    
+    
+    /**
+    Unwind segue back to view controller
+    
+    :param: UIStoryboardSegue Unwind segue
+    */
+    @IBAction func unwindToVC(segue: UIStoryboardSegue) {
+    }
 }
-
-let mainView = ViewController()
