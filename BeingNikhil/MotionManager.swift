@@ -236,69 +236,48 @@ class MotionManager: NSObject {
     
     func compareDriveToTemplate(drive: Drive, template: Template) {
         var turnScores = [[Double]]()
-        var driveScores = [Double]()
-        var templateScore = Double()
+        var templateTimestamps = [String]()
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "MM-dd h:mm a"
+
+        let sortDescriptor = NSSortDescriptor(key: "timestamp", ascending: true)
+        let templateDrives = template.drives.sortedArrayUsingDescriptors([sortDescriptor])
+
+        for i in 1...templateDrives.count {
+            turnScores.append(Array(count: drive.turns.count, repeatedValue:Double()))
+        }
         
-        for templateDrive in template.drives {
+        var driveCounter = 0
+        for templateDrive in templateDrives {
             let tempDrive = templateDrive as! Drive
-            var turnDTWs = [Double]()
+            templateTimestamps.append(dateFormatter.stringFromDate(tempDrive.timestamp))
             for turn in drive.turns {
                 let comparisonTurn = turn as! Turn
                 for tempTurn in tempDrive.turns {
                     let templateTurn = tempTurn as! Turn
                     if comparisonTurn.turnNumber == templateTurn.turnNumber {
-                        println(comparisonTurn.turnNumber)
                         dynamicTimeWarping(comparisonTurn.sensorData as! [Double], t: templateTurn.sensorData as! [Double])
-                        turnDTWs.append(DTW)
+                        turnScores[driveCounter][Int(comparisonTurn.turnNumber) - 1] = DTW
                     }
                 }
             }
-            turnScores.append(turnDTWs)
+            driveCounter++
         }
-        
-        for i in 0...turnScores.count - 1 {
-            var stringToPrint = String()
-            stringToPrint += "Drive \(i) "
-            for j in 0...turnScores[i].count - 1 {
-                stringToPrint += "\(turnScores[i][j]) "
-            }
-            println(stringToPrint)
-        }
-        
+        printArray(turnScores)
+        println(templateTimestamps)
+        //CREATE CSV FILE!
     }
-                
-                
-                
-//                for templateTurn in templateDrive.valueForKey("turns") as! [NSManagedObject] {
-//                    if turn.valueForKey("turnNumber") as! NSNumber == templateTurn.valueForKey("turnNumber") as! NSNumber {
-//                        dynamicTimeWarping(drive.valueForKey("sensorData") as! [Double], t: tun.valu)
-//                    }
-//                }
-//        }
-//    }
     
-//    func compareDrives() {
-//        
-//        let fetchMotion = NSFetchRequest(entityName: "Turn")
-//        fetchMotion.predicate = NSPredicate(format: "drive.timestamp == %@", startMonitoringDate)
-//        if let matchTurns = managedObjectContext.executeFetchRequest(fetchMotion, error: nil) as? [Turn] {
-//            for matchTurn in matchTurns {
-//                let fetchTurnNumber = NSFetchRequest(entityName: "Turn")
-//                let firstPredicate = NSPredicate(format: "turnNumber == %@", matchTurn.turnNumber)
-//                let secondPredicate = NSPredicate(format: "drive.timestamp != %@", startMonitoringDate)
-//                fetchTurnNumber.predicate = NSCompoundPredicate(type: NSCompoundPredicateType.OrPredicateType, subpredicates: [firstPredicate, secondPredicate])
-//                if let templateTurns = managedObjectContext.executeFetchRequest(fetchMotion, error: nil) as? [Turn] {
-//                    for templateTurn in templateTurns {
-//                        dynamicTimeWarping(matchTurn.sensorData as! [Double], t: templateTurn.sensorData as! [Double])
-//                        updateDTW()
-//                    }
-//                }
-//
-//            }
-//        }
-//        print("CompareDrives Ran")
-//        
-//    }
+    func printArray(turnScores: [[Double]]) {
+        for i in 0...turnScores.count - 1 {
+        var stringToPrint = String()
+        stringToPrint += "Drive \(i+1) "
+        for j in 0...turnScores[i].count - 1 {
+        stringToPrint += "\(turnScores[i][j]) "
+        }
+        println(stringToPrint)
+        }
+    }
 }
 
 /// MotionManager object to be used in other classes
