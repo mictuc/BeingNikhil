@@ -73,11 +73,47 @@ class TemplateTableViewController: TableViewSuperClass, UITableViewDataSource, U
             }
         }
         
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "MM-dd h:mm a"
+        
+        var comparisonResults = String()
+        
         for drive in comparisonDrives {
+            let tempDrive = drive as! Drive
             for template in comparisonTemplates {
-                sharedMotion.compareDriveToTemplate(drive as! Drive, template: template as! Template)
+                let tempTemplate = template as! Template
+                let turnScores = sharedMotion.compareDriveToTemplate(tempDrive, template: tempTemplate)
+                var finalDTW = Double()
+                for i in 0...turnScores.count - 1 {
+                    for j in 0...turnScores[i].count - 1 {
+                        finalDTW += turnScores[i][j]
+                    }
+                }
+                finalDTW /= Double(turnScores.count * turnScores[0].count)
+                
+                let name = "\(tempDrive.subject.name)–\(dateFormatter.stringFromDate(tempDrive.timestamp))–\(tempTemplate.name)–Comparison)"
+                
+                comparisonResults += "\(name): \(finalDTW)\n"
+                
+                saveEntity("comparison", name: name, attributes: [turnScores, "scores", finalDTW, "finalDTW"], relationships: [drive, template], relationshipType: "comparisons")
             }
         }
+        displayComparisonResults(comparisonResults)
+    }
+    
+    func displayComparisonResults(comparisonResults: String) {
+        let comparisonReport = UIAlertController(title: "Comparison Results", message: comparisonResults, preferredStyle: .Alert)
+        
+        comparisonReport.addAction(UIAlertAction(title: "OK", style: .Default,
+            handler: { (action) -> Void in
+        }))
+        
+        comparisonReport.addAction(UIAlertAction(title: "Export Data", style: .Default,
+            handler: { (action) -> Void in
+        }))
+        
+        self.presentViewController(comparisonReport, animated: true, completion: nil)
+
     }
 
 }

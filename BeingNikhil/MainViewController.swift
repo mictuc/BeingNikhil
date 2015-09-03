@@ -25,6 +25,12 @@ class MainViewController: UIViewController {
     /// ID for segue to store drives
     let storeDriveSegueIdentifier = "storeDriveSegue"
     
+    /// ID for segue to browse data
+    let fileBrowseSegueIdentifier = "fileBrowseSegue"
+    
+    /// ID for segue to export data
+    let exportSegueIdentifier = "exportSegue"
+    
     /// Monitoring device motion
     var monitor = false
     
@@ -113,6 +119,14 @@ class MainViewController: UIViewController {
         }
     }
     
+    @IBAction func fileButtonClicked(sender: AnyObject) {
+        if sharedView.mode == .Export {
+            performSegueWithIdentifier(exportSegueIdentifier, sender: navigationItem.rightBarButtonItem)
+        } else {
+            performSegueWithIdentifier(fileBrowseSegueIdentifier, sender: navigationItem.rightBarButtonItem)
+        }
+        
+    }
     /**
     Determines whether or not the user is storing a drive or not
     

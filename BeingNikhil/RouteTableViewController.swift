@@ -14,9 +14,6 @@ import CoreData
 /// TableViewController to display saved routes
 /// For more methods and variables see TableViewSuperClass
 class RouteTableViewController: TableViewSuperClass, UITableViewDataSource, UITableViewDelegate  {
-        
-    /// Saved routes which are displayed
-    var routes = [NSManagedObject]()
     
     /// ID for segue to subjects
     let subjectSegueIdentifier = "subjectSegue"

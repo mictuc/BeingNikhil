@@ -114,22 +114,18 @@ class TableViewSuperClass: UITableViewController {
             textField.placeholder = "Name"
         }
         
-        namePrompt.addAction(UIAlertAction(title: "Cancel",
-            style: .Default,
+        namePrompt.addAction(UIAlertAction(title: "Cancel", style: .Default,
             handler: { (action) -> Void in
         }))
         
-        namePrompt.addAction(UIAlertAction(title: "Ok",
-            style: .Default,
+        namePrompt.addAction(UIAlertAction(title: "Ok", style: .Default,
             handler: { (action) -> Void in
                 if let textField = nameTextField {
                     self.saveEntity(entityType, name: textField.text, attributes: attributes, predicateDescription: predicateDescription, predicateObject: predicateObject, relationships: relationships, relationshipType: relationshipType)
                 }
         }))
         
-        self.presentViewController(namePrompt,
-            animated: true,
-            completion: nil)
+        self.presentViewController(namePrompt, animated: true,completion: nil)
     }
     
     /**

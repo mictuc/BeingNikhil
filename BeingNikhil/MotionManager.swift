@@ -234,7 +234,7 @@ class MotionManager: NSObject {
         printDeviceMotionData()
     }
     
-    func compareDriveToTemplate(drive: Drive, template: Template) {
+    func compareDriveToTemplate(drive: Drive, template: Template) -> [[Double]] {
         var turnScores = [[Double]]()
         var templateTimestamps = [String]()
         let dateFormatter = NSDateFormatter()
@@ -263,10 +263,15 @@ class MotionManager: NSObject {
             }
             driveCounter++
         }
-        printArray(turnScores)
-        println(templateTimestamps)
+        
+        return turnScores
+        
+        //createCSVString(drive, template: template, turnScores: turnScores, templateTimestamps: templateTimestamps)
+//        printArray(turnScores)
+//        println(templateTimestamps)
         //CREATE CSV FILE!
     }
+    
     
     func printArray(turnScores: [[Double]]) {
         for i in 0...turnScores.count - 1 {
