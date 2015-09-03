@@ -16,20 +16,17 @@ import CoreData
 /// For more methods and variables see TableViewSuperClass
 class TemplateTableViewController: TableViewSuperClass, UITableViewDataSource, UITableViewDelegate{
     
-    /// Route for which templates to select
-    var route = Route()
-    
     /// Initializes the title and route then fetches template data
     override func viewDidLoad() {
         super.viewDidLoad()
-        route = managedObjectContext!.objectWithID(sharedView.routeID) as! Route
+        let route = managedObjectContext!.objectWithID(sharedView.routeID) as! Route
         title = route.name + "'s Templates"
         fetchTemplate()
     }
     
     /// Fetches templates for the selected route and stores it in coreDataArray
     func fetchTemplate() {
-        fetchCoreData("Template", predicateDescription: "route == %@", predicateObject: route, sortAttribute: "name")
+        fetchCoreData("Template", predicateDescription: "route == %@", predicateObject: managedObjectContext!.objectWithID(sharedView.routeID) as! Route, sortAttribute: "name")
     }
     
     /// Formates each cell with data from the coreDataArray
@@ -64,6 +61,22 @@ class TemplateTableViewController: TableViewSuperClass, UITableViewDataSource, U
         }else{
             cell!.accessoryType = UITableViewCellAccessoryType.Checkmark
             template.selected = true
+        }
+    }
+    
+    @IBAction func compareClicked(sender: AnyObject) {
+        let comparisonDrives = sharedView.comparisonDrives
+        var comparisonTemplates = [NSManagedObject]()
+        for template in coreDataArray {
+            if template.valueForKey("selected") as! Bool {
+                comparisonTemplates.append(template)
+            }
+        }
+        
+        for drive in comparisonDrives {
+            for template in comparisonTemplates {
+                sharedMotion.compareDriveToTemplate(drive as! Drive, template: template as! Template)
+            }
         }
     }
 

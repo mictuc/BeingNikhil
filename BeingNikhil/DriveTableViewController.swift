@@ -152,6 +152,13 @@ class DriveTableViewController: TableViewSuperClass, UITableViewDataSource, UITa
             sharedLocation.locations = coreDataArray[0].valueForKey("locations") as! [(CLLocation)]
             sharedView.routeID = coreDataArray[0].valueForKey("subject")!.valueForKey("Route")!.objectID
         } else if segue.identifier == templateSegueIdentifier {
+            var comparisonDrives = [NSManagedObject]()
+            for drive in coreDataArray {
+                if drive.valueForKey("selected") as! Bool {
+                    comparisonDrives.append(drive)
+                }
+            }
+            sharedView.comparisonDrives = comparisonDrives
             let subject = managedObjectContext!.objectWithID(sharedView.subjectID) as! Subject
             sharedView.routeID = subject.route.objectID
         }

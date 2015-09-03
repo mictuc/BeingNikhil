@@ -234,6 +234,49 @@ class MotionManager: NSObject {
         printDeviceMotionData()
     }
     
+    func compareDriveToTemplate(drive: Drive, template: Template) {
+        var turnScores = [[Double]]()
+        var driveScores = [Double]()
+        var templateScore = Double()
+        
+        for templateDrive in template.drives {
+            let tempDrive = templateDrive as! Drive
+            var turnDTWs = [Double]()
+            for turn in drive.turns {
+                let comparisonTurn = turn as! Turn
+                for tempTurn in tempDrive.turns {
+                    let templateTurn = tempTurn as! Turn
+                    if comparisonTurn.turnNumber == templateTurn.turnNumber {
+                        println(comparisonTurn.turnNumber)
+                        dynamicTimeWarping(comparisonTurn.sensorData as! [Double], t: templateTurn.sensorData as! [Double])
+                        turnDTWs.append(DTW)
+                    }
+                }
+            }
+            turnScores.append(turnDTWs)
+        }
+        
+        for i in 0...turnScores.count - 1 {
+            var stringToPrint = String()
+            stringToPrint += "Drive \(i) "
+            for j in 0...turnScores[i].count - 1 {
+                stringToPrint += "\(turnScores[i][j]) "
+            }
+            println(stringToPrint)
+        }
+        
+    }
+                
+                
+                
+//                for templateTurn in templateDrive.valueForKey("turns") as! [NSManagedObject] {
+//                    if turn.valueForKey("turnNumber") as! NSNumber == templateTurn.valueForKey("turnNumber") as! NSNumber {
+//                        dynamicTimeWarping(drive.valueForKey("sensorData") as! [Double], t: tun.valu)
+//                    }
+//                }
+//        }
+//    }
+    
 //    func compareDrives() {
 //        
 //        let fetchMotion = NSFetchRequest(entityName: "Turn")

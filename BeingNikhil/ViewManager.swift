@@ -31,6 +31,9 @@ class ViewManager: NSObject {
     
     /// The ID of the latest subject selected
     var subjectID = NSManagedObjectID()
+    
+    /// The array of drives to compare to a template
+    var comparisonDrives = [NSManagedObject]()
 }
 
 /// ViewManager object to be used by other classes
