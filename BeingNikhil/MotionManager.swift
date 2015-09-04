@@ -173,7 +173,6 @@ class MotionManager: NSObject {
         drive.timestamp = startMonitoringDate
         drive.locations = sharedLocation.locations
         drive.duration = NSDate().timeIntervalSinceDate(startMonitoringDate)
-        drive.selected = false
     }
     
     /**

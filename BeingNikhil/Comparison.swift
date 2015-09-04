@@ -45,7 +45,7 @@ class Comparison: NSManagedObject {
         csv += "Template Subject:,\(template.subject.name)\n\n,"
         var templateTimes = String()
         for i in 0...templateDrives.count - 1 {
-            csv += "Template Drive \(i)"
+            csv += "Template Drive \(i + 1),"
             templateTimes += "\(dateFormatter.stringFromDate(templateDrives[i].timestamp)),"
         }
         csv += "\n"
@@ -55,23 +55,20 @@ class Comparison: NSManagedObject {
         var driveAverages = [Double](count: templateDrives.count, repeatedValue: 0.0)
         
         for i in 0...drive.turns.count - 1 {
-            csv += "\(i),"
+            csv += "\(i + 1),"
             for j in 0...templateDrives.count - 1 {
                 turnAverages[i] += turnScores[j][i]
                 driveAverages[j] += turnScores[j][i]
                 csv += "\(turnScores[j][i]),"
             }
             turnAverages[i] /= Double(templateDrives.count)
-            csv += "\(turnAverages[i])\n,"
+            csv += "\(turnAverages[i])\n"
         }
         csv += "Drive Averages,"
-//        var finalDTWAverage = Double()
         for i in 0...templateDrives.count - 1 {
             driveAverages[i] /= Double(drive.turns.count)
-//            finalDTWAverage += driveAverages[i]
             csv += "\(driveAverages[i]),"
         }
-//        finalDTWAverage /= Double(templateDrives.count)
         csv += "\(finalDTW)"
         return csv
     }

@@ -55,7 +55,6 @@ class DriveTableViewController: TableViewSuperClass, UITableViewDataSource, UITa
         cell.textLabel?.text = dateFormatter.stringFromDate(drive.timestamp)
         cell.detailTextLabel?.text = "Duration: \(drive.duration)   Turns: \(drive.turns.count)   Subject: \(drive.subject.name)    Route: \(drive.subject.route.name)"
         cell.accessoryType = UITableViewCellAccessoryType.None
-        drive.selected = false
         return cell
     }
     
@@ -75,10 +74,8 @@ class DriveTableViewController: TableViewSuperClass, UITableViewDataSource, UITa
         let drive = coreDataArray[indexPath.row] as! Drive
         if (cell?.accessoryType == UITableViewCellAccessoryType.Checkmark){
             cell!.accessoryType = UITableViewCellAccessoryType.None
-            drive.selected = false
         }else{
             cell!.accessoryType = UITableViewCellAccessoryType.Checkmark
-            drive.selected = true
         }
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
@@ -95,11 +92,9 @@ class DriveTableViewController: TableViewSuperClass, UITableViewDataSource, UITa
     /// Tests the selected drives as a template by running DTW between every pair of drives and takes the average of the average of the DTW for each turn of the drive as the final score for each selected drive, then displays scores in alert view
     func testTemplate() {
         var templateDrives = [Drive]()
-        for drive in coreDataArray {
-            let tempDrive = drive as! Drive
-            if tempDrive.selected {
-                templateDrives.append(tempDrive)
-            }
+        let indexPaths = getSelectedCells()
+        for indexPath in indexPaths {
+            templateDrives.append(coreDataArray[indexPath.row] as! Drive)
         }
         var templateScores = [Double]()
         for drive in templateDrives {
@@ -153,54 +148,13 @@ class DriveTableViewController: TableViewSuperClass, UITableViewDataSource, UITa
             sharedView.routeID = coreDataArray[0].valueForKey("subject")!.valueForKey("Route")!.objectID
         } else if segue.identifier == templateSegueIdentifier {
             var comparisonDrives = [NSManagedObject]()
-            for drive in coreDataArray {
-                if drive.valueForKey("selected") as! Bool {
-                    comparisonDrives.append(drive)
-                }
+            let indexPaths = getSelectedCells()
+            for indexPath in indexPaths {
+                comparisonDrives.append(coreDataArray[indexPath.row])
             }
             sharedView.comparisonDrives = comparisonDrives
             let subject = managedObjectContext!.objectWithID(sharedView.subjectID) as! Subject
             sharedView.routeID = subject.route.objectID
         }
     }
-    
-    
-    ///EXPORT TO CSV STUFF–––TO MOVE!
-    var exportFileURL = NSURL()
-    var exportFiles = [NSURL]()
-    
-    func exportCSVFile(drive: Drive) {
-        let exportFilePath = NSTemporaryDirectory() + "export.csv"
-        exportFileURL = NSURL(fileURLWithPath: exportFilePath)!
-        NSFileManager.defaultManager().createFileAtPath(exportFilePath, contents: NSData(), attributes: nil)
-        var fileHandleError: NSError? = nil
-        let fileHandle = NSFileHandle(forWritingToURL: exportFileURL, error: &fileHandleError)
-        if let fileHandle = fileHandle {
-            let csvData = drive.csv().dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
-            fileHandle.writeData(csvData!)
-            fileHandle.closeFile()
-            println("Export Path: \(exportFilePath)")
-        } else {
-            println("ERROR: \(fileHandleError)")
-        }
-        exportFiles.append(exportFileURL)
-    }
-    
-    @IBAction func shareButtonClicked(sender: AnyObject) {
-        for drive in coreDataArray {
-            let tempDrive = drive as! Drive
-            if tempDrive.selected {
-                exportCSVFile(drive as! Drive)
-            }
-        }
-        let textToShare = "Exported Drive Data"
-        var objectsToShare = [AnyObject]()
-        objectsToShare.append(textToShare)
-        for exportFile in exportFiles {
-            objectsToShare.append(exportFile)
-        }
-        let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-        self.presentViewController(activityVC, animated: true, completion: nil)
-    }
-
 }

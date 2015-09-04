@@ -25,9 +25,6 @@ class Template: NSManagedObject {
     /// Route used by the template
     @NSManaged var route: Route
     
-    /// Selected variable for tableView purposes
-    @NSManaged var selected: Bool
-    
     /// Subject who drove the drives in the template
     @NSManaged var subject: Subject
 

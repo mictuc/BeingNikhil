@@ -226,13 +226,7 @@
                             <outlet property="delegate" destination="u4c-fk-7O7" id="7hj-2V-Rrl"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="yEY-ZN-36L">
-                        <barButtonItem key="rightBarButtonItem" systemItem="action" id="FU1-Hh-l9K">
-                            <connections>
-                                <action selector="shareButtonClicked:" destination="u4c-fk-7O7" id="HoE-dU-N8S"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="yEY-ZN-36L"/>
                     <connections>
                         <outlet property="compareButton" destination="xr3-rt-Dn3" id="YdH-jh-6b0"/>
                         <segue destination="iPS-wN-ZJe" kind="unwind" identifier="unwindSegue" unwindAction="unwindToVC:" id="Ph3-g9-hY4"/>

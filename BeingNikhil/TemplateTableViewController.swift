@@ -38,7 +38,6 @@ class TemplateTableViewController: TableViewSuperClass, UITableViewDataSource, U
         cell.textLabel!.text = template.name
         cell.detailTextLabel?.text = "Route: \(template.route.name)  Subject: \(template.subject.name)    # Drives: \(template.drives.count)"
         cell.accessoryType = UITableViewCellAccessoryType.None
-        template.selected = false
         return cell
     }
     
@@ -59,22 +58,18 @@ class TemplateTableViewController: TableViewSuperClass, UITableViewDataSource, U
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         if (cell?.accessoryType == UITableViewCellAccessoryType.Checkmark){
             cell!.accessoryType = UITableViewCellAccessoryType.None
-            template.selected = false
         }else{
             cell!.accessoryType = UITableViewCellAccessoryType.Checkmark
-            template.selected = true
         }
     }
     
     @IBAction func compareClicked(sender: AnyObject) {
         let comparisonDrives = sharedView.comparisonDrives
         var comparisonTemplates = [NSManagedObject]()
-        for template in coreDataArray {
-            if template.valueForKey("selected") as! Bool {
-                comparisonTemplates.append(template)
-            }
+        let indexPaths = getSelectedCells()
+        for indexPath in indexPaths {
+            comparisonTemplates.append(coreDataArray[indexPath.row])
         }
-        
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "MM-dd h:mm a"
         

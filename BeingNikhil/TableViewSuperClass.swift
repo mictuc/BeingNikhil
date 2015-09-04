@@ -42,7 +42,7 @@ class TableViewSuperClass: UITableViewController {
     var cellSubtitleEntity: String {
         return "Subject"
     }
-
+    
     /**
         Fetches core data entities from the app based on the passed in parameters
         then sets coreDataArray to results
@@ -159,6 +159,18 @@ class TableViewSuperClass: UITableViewController {
             fetchCoreData(entityType, predicateDescription: predicateDescription!, predicateObject: predicateObject, sortAttribute: cellSortingAttribute)
             self.tableView.reloadData()
         }
+    }
+    
+    func getSelectedCells() -> [NSIndexPath] {
+        var indexPaths = [NSIndexPath]()
+        for row in 0...coreDataArray.count - 1 {
+            let cellPath = NSIndexPath(forRow: row, inSection: 0)
+            let cell = tableView.cellForRowAtIndexPath(cellPath)
+            if cell?.accessoryType == UITableViewCellAccessoryType.Checkmark {
+                indexPaths.append(cellPath)
+            }
+        }
+        return indexPaths
     }
 
     /**

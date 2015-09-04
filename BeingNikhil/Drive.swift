@@ -29,9 +29,6 @@ class Drive: NSManagedObject {
     /// Turn events during the drive
     @NSManaged var turns: NSOrderedSet
     
-    /// Selected variable for tableView purposes
-    @NSManaged var selected: Bool
-    
     /// Subject who drove the drive
     @NSManaged var subject: Subject
     

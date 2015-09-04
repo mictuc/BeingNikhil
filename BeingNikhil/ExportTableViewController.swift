@@ -54,10 +54,6 @@ class ExportTableViewController: TableViewSuperClass, UITableViewDataSource, UIT
             }
         }
         println(indexPaths.count)
-        
-//        let indexPaths = self.tableView.indexPathsForSelectedRows()
-//        for i in 0...indexPaths!.count - 1 {
-//            let indexPath = indexPaths![i] as! NSIndexPath
         for indexPath in indexPaths {
             exportCSVFile(data[sections[indexPath.section]!]![indexPath.row])
         }
@@ -72,8 +68,17 @@ class ExportTableViewController: TableViewSuperClass, UITableViewDataSource, UIT
     }
     
     func exportCSVFile(entity: NSManagedObject) {
-        /// Change Name of file!!!
-        let exportFilePath = NSTemporaryDirectory() + "export.csv"
+        var fileName = String()
+        if entity.isKindOfClass(Drive) {
+            let dateFormatter = NSDateFormatter()
+            dateFormatter.dateFormat = "MM-dd h:mm"
+            let tempEntity = entity as! Drive
+            fileName += tempEntity.subject.route.name
+            fileName += "_\(tempEntity.subject.name)_\(dateFormatter.stringFromDate(tempEntity.timestamp))"
+        } else {
+            fileName = entity.valueForKey("name") as! String
+        }
+        let exportFilePath = NSTemporaryDirectory() + "\(fileName).csv"
         exportFileURL = NSURL(fileURLWithPath: exportFilePath)!
         NSFileManager.defaultManager().createFileAtPath(exportFilePath, contents: NSData(), attributes: nil)
         var fileHandleError: NSError? = nil
@@ -157,14 +162,12 @@ class ExportTableViewController: TableViewSuperClass, UITableViewDataSource, UIT
     /// Selects or deselects an object at a given row
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath)
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        if (cell!.selected){
+        if (cell!.accessoryType == UITableViewCellAccessoryType.Checkmark){
             cell!.accessoryType = UITableViewCellAccessoryType.None
-            cell!.selected = false
         }else{
             cell!.accessoryType = UITableViewCellAccessoryType.Checkmark
-            cell!.selected = true
         }
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
