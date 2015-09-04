@@ -31,5 +31,15 @@ class Template: NSManagedObject {
     /// Subject who drove the drives in the template
     @NSManaged var subject: Subject
 
+    func csv() -> String {
+        var csv = String()
+        csv += "Name:,\(name)\n" + "Subject:,\(subject.name)\n" + "Route:,\(route.name)\n"
+        for drive in drives {
+            let tempDrive = drive as! Drive
+            csv += tempDrive.csv()
+            csv += "/n"
+        }
+        return csv
+    }
     
 }

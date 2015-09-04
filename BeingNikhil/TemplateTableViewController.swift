@@ -16,6 +16,8 @@ import CoreData
 /// For more methods and variables see TableViewSuperClass
 class TemplateTableViewController: TableViewSuperClass, UITableViewDataSource, UITableViewDelegate{
     
+    let exportSegueIdentifier = "exportDataSegue"
+    
     /// Initializes the title and route then fetches template data
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -94,8 +96,7 @@ class TemplateTableViewController: TableViewSuperClass, UITableViewDataSource, U
                 let name = "\(tempDrive.subject.name)–\(dateFormatter.stringFromDate(tempDrive.timestamp))–\(tempTemplate.name)–Comparison)"
                 
                 comparisonResults += "\(name): \(finalDTW)\n"
-                
-                saveEntity("comparison", name: name, attributes: [turnScores, "scores", finalDTW, "finalDTW"], relationships: [drive, template], relationshipType: "comparisons")
+                saveEntity("Comparison", name: name, attributes: [turnScores, "scores", finalDTW, "finalDTW"], relationships: [drive, template], relationshipType: "comparisons")
             }
         }
         displayComparisonResults(comparisonResults)
@@ -110,6 +111,7 @@ class TemplateTableViewController: TableViewSuperClass, UITableViewDataSource, U
         
         comparisonReport.addAction(UIAlertAction(title: "Export Data", style: .Default,
             handler: { (action) -> Void in
+                self.performSegueWithIdentifier(self.exportSegueIdentifier, sender: comparisonReport)
         }))
         
         self.presentViewController(comparisonReport, animated: true, completion: nil)

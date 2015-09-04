@@ -40,6 +40,9 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let locManager = CLLocationManager()
+        locManager.requestWhenInUseAuthorization()
+
 //        Display current path on Map?
 //        let locations = sharedLocation.locations
         

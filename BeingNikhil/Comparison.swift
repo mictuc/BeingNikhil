@@ -51,8 +51,8 @@ class Comparison: NSManagedObject {
         csv += "\n"
         csv += "Turn Number," + templateTimes + "Turn DTW Averages\n"
         
-        var turnAverages = [Double]()
-        var driveAverages = [Double]()
+        var turnAverages = [Double](count: drive.turns.count, repeatedValue: 0.0)
+        var driveAverages = [Double](count: templateDrives.count, repeatedValue: 0.0)
         
         for i in 0...drive.turns.count - 1 {
             csv += "\(i),"
@@ -61,7 +61,7 @@ class Comparison: NSManagedObject {
                 driveAverages[j] += turnScores[j][i]
                 csv += "\(turnScores[j][i]),"
             }
-            turnAverages[i-1] /= Double(templateDrives.count)
+            turnAverages[i] /= Double(templateDrives.count)
             csv += "\(turnAverages[i])\n,"
         }
         csv += "Drive Averages,"

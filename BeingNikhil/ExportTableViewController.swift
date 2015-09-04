@@ -18,7 +18,7 @@ class ExportTableViewController: TableViewSuperClass, UITableViewDataSource, UIT
     //var sectionsOfData = [Int : String]()
     var data = [String : [NSManagedObject]]()
     
-    let sections = [1 : "Drives", 2 : "Templates", 3 : "Comparisons"]
+    let sections = [0 : "Drive", 1 : "Template", 2 : "Comparison"]
     
     var exportFileURL = NSURL()
     var exportFiles = [NSURL]()
@@ -33,44 +33,35 @@ class ExportTableViewController: TableViewSuperClass, UITableViewDataSource, UIT
     /// Fetches the Route entities from core data
     func fetchData() {
         for key in sections.keys {
-            fetchCoreData(sections[key]!, sortAttribute: "name")
+            if sections[key]! != "Drive" {
+                fetchCoreData(sections[key]!, sortAttribute: "name")
+            } else {
+                fetchCoreData(sections[key]!, sortAttribute: "timestamp")
+            }
             data[sections[key]!] = coreDataArray
         }
     }
     
     @IBAction func exportData(sender: AnyObject) {
-        let indexPaths = self.tableView.indexPathsForSelectedRows() as! [NSIndexPath]
-        for indexPath in indexPaths {
-            //exportCSVFile(data[sections[indexPath.section]!]![indexPath.row])
-        }
-        /// Share...
-    }
-    
-    func exportCSVFile(drive: Drive) {
-        let exportFilePath = NSTemporaryDirectory() + "export.csv"
-        exportFileURL = NSURL(fileURLWithPath: exportFilePath)!
-        NSFileManager.defaultManager().createFileAtPath(exportFilePath, contents: NSData(), attributes: nil)
-        var fileHandleError: NSError? = nil
-        let fileHandle = NSFileHandle(forWritingToURL: exportFileURL, error: &fileHandleError)
-        if let fileHandle = fileHandle {
-            let csvData = drive.csv().dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
-            fileHandle.writeData(csvData!)
-            fileHandle.closeFile()
-            println("Export Path: \(exportFilePath)")
-        } else {
-            println("ERROR: \(fileHandleError)")
-        }
-        exportFiles.append(exportFileURL)
-    }
-    
-    @IBAction func shareButtonClicked(sender: AnyObject) {
-        for drive in coreDataArray {
-            let tempDrive = drive as! Drive
-            if tempDrive.selected {
-                exportCSVFile(drive as! Drive)
+        var indexPaths = [NSIndexPath]()
+        for section in 0...sections.count - 1 {
+            for row in 0...data[sections[section]!]!.count - 1 {
+                let cellPath = NSIndexPath(forRow: row, inSection: section)
+                let cell = tableView.cellForRowAtIndexPath(cellPath)
+                if cell?.accessoryType == UITableViewCellAccessoryType.Checkmark {
+                    indexPaths.append(cellPath)
+                }
             }
         }
-        let textToShare = "Exported Drive Data"
+        println(indexPaths.count)
+        
+//        let indexPaths = self.tableView.indexPathsForSelectedRows()
+//        for i in 0...indexPaths!.count - 1 {
+//            let indexPath = indexPaths![i] as! NSIndexPath
+        for indexPath in indexPaths {
+            exportCSVFile(data[sections[indexPath.section]!]![indexPath.row])
+        }
+        let textToShare = "Exported Data Files"
         var objectsToShare = [AnyObject]()
         objectsToShare.append(textToShare)
         for exportFile in exportFiles {
@@ -79,9 +70,34 @@ class ExportTableViewController: TableViewSuperClass, UITableViewDataSource, UIT
         let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
         self.presentViewController(activityVC, animated: true, completion: nil)
     }
-
     
-    
+    func exportCSVFile(entity: NSManagedObject) {
+        /// Change Name of file!!!
+        let exportFilePath = NSTemporaryDirectory() + "export.csv"
+        exportFileURL = NSURL(fileURLWithPath: exportFilePath)!
+        NSFileManager.defaultManager().createFileAtPath(exportFilePath, contents: NSData(), attributes: nil)
+        var fileHandleError: NSError? = nil
+        let fileHandle = NSFileHandle(forWritingToURL: exportFileURL, error: &fileHandleError)
+        if let fileHandle = fileHandle {
+            var csvData = NSData()
+            if entity.isKindOfClass(Template) {
+                let tempEntity = entity as! Template
+                csvData = tempEntity.csv().dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
+            } else if entity.isKindOfClass(Drive) {
+                let tempEntity = entity as! Drive
+                csvData = tempEntity.csv().dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
+            } else {
+                let tempEntity = entity as! Comparison
+                csvData = tempEntity.csv().dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
+            }
+            fileHandle.writeData(csvData)
+            fileHandle.closeFile()
+            println("Export Path: \(exportFilePath)")
+        } else {
+            println("ERROR: \(fileHandleError)")
+        }
+        exportFiles.append(exportFileURL)
+    }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return sections.count
@@ -94,24 +110,12 @@ class ExportTableViewController: TableViewSuperClass, UITableViewDataSource, UIT
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sections[section]!
     }
-    
-    override func sectionIndexTitlesForTableView(tableView: UITableView) -> [AnyObject] {
-        var indexTitles = [String]()
-        for i in 1...3 {
-            indexTitles.append(sections[i]!)
-        }
-        return indexTitles
-    }
-    
-    override func tableView(tableView: UITableView, sectionForSectionIndexTitle title: String, atIndex index: Int) -> Int {
-        return index
-    }
-    
+        
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let section = sections[indexPath.section]!
         let entity = data[section]![indexPath.row]
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
-        if section == "Drives" {
+        if section == "Drive" {
             let dateFormatter = NSDateFormatter()
             dateFormatter.dateFormat = "MM-dd h:mm a"
             var title = String()
@@ -119,16 +123,16 @@ class ExportTableViewController: TableViewSuperClass, UITableViewDataSource, UIT
             title += entity.valueForKey("subject")!.valueForKey("route")!.valueForKey("name") as! String
             title += "   Subject: "
             title += entity.valueForKey("subject")!.valueForKey("name") as! String
-            title += "   Time: "
-            title += dateFormatter.stringFromDate(entity.valueForKey("timestamp") as! NSDate)
             cell.textLabel!.text = title
             var subtitle = String()
-            subtitle += "Duration: "
+            subtitle += "Time: "
+            subtitle += dateFormatter.stringFromDate(entity.valueForKey("timestamp") as! NSDate)
+            subtitle += "   Duration: "
             subtitle += String(Int(entity.valueForKey("duration") as! NSNumber))
             subtitle += "   Turns: "
             subtitle += String(entity.valueForKey("turns")!.count)
             cell.detailTextLabel!.text = subtitle
-        } else if section == "Templates" {
+        } else if section == "Template" {
             cell.textLabel!.text = entity.valueForKey("name") as? String
             var subtitle = String()
             subtitle += "Route: "
@@ -140,7 +144,7 @@ class ExportTableViewController: TableViewSuperClass, UITableViewDataSource, UIT
             cell.textLabel!.text = entity.valueForKey("name") as? String
             var subtitle = String()
             subtitle += "Route: "
-            subtitle += entity.valueForKey("drive")!.valueForKey("route")!.valueForKey("name") as! String
+            subtitle += entity.valueForKey("drive")!.valueForKey("subject")!.valueForKey("route")!.valueForKey("name") as! String
             subtitle += "   Comparison Subject: "
             subtitle += entity.valueForKey("drive")!.valueForKey("subject")!.valueForKey("name") as! String
             subtitle += "   Template: "
@@ -148,6 +152,33 @@ class ExportTableViewController: TableViewSuperClass, UITableViewDataSource, UIT
             cell.detailTextLabel!.text = subtitle
         }
         return cell
+    }
+
+    /// Selects or deselects an object at a given row
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let cell = tableView.cellForRowAtIndexPath(indexPath)
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        if (cell!.selected){
+            cell!.accessoryType = UITableViewCellAccessoryType.None
+            cell!.selected = false
+        }else{
+            cell!.accessoryType = UITableViewCellAccessoryType.Checkmark
+            cell!.selected = true
+        }
+    }
+    
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if(editingStyle == .Delete ) {
+            let section = sections[indexPath.section]!
+            if section == "Drive" {
+                deleteDriveData(data[section]![indexPath.row] as! Drive)
+            } else {
+                managedObjectContext?.deleteObject(data[section]![indexPath.row])
+            }
+            appDelegate.saveContext()
+            self.fetchData()
+            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+        }
     }
 
 

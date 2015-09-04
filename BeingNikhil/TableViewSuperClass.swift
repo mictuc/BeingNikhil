@@ -155,7 +155,7 @@ class TableViewSuperClass: UITableViewController {
         if entityType == "Route" {
             fetchCoreData(entityType, sortAttribute: cellSortingAttribute)
             self.tableView.reloadData()
-        } else if entityType != "Template" {
+        } else if entityType != "Template" && entityType != "Comparison" {
             fetchCoreData(entityType, predicateDescription: predicateDescription!, predicateObject: predicateObject, sortAttribute: cellSortingAttribute)
             self.tableView.reloadData()
         }
