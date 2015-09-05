@@ -155,7 +155,6 @@ class MotionManager: NSObject {
                 priorRotationRatesInTurn = rotationRatesInTurn
                 turn.sensorData = priorRotationRatesInTurn
                 turn.turnNumber = turnCount
-                turn.dataString = priorRotationRatesInTurn.description
                 turn.drive = drive
                 turn.endTime = NSDate()
                 turn.duration = NSDate().timeIntervalSinceDate(turn.startTime)
@@ -264,24 +263,9 @@ class MotionManager: NSObject {
         }
         
         return turnScores
-        
-        //createCSVString(drive, template: template, turnScores: turnScores, templateTimestamps: templateTimestamps)
-//        printArray(turnScores)
-//        println(templateTimestamps)
-        //CREATE CSV FILE!
     }
     
     
-    func printArray(turnScores: [[Double]]) {
-        for i in 0...turnScores.count - 1 {
-        var stringToPrint = String()
-        stringToPrint += "Drive \(i+1) "
-        for j in 0...turnScores[i].count - 1 {
-        stringToPrint += "\(turnScores[i][j]) "
-        }
-        println(stringToPrint)
-        }
-    }
 }
 
 /// MotionManager object to be used in other classes

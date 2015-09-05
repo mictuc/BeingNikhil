@@ -30,11 +30,11 @@ class Template: NSManagedObject {
 
     func csv() -> String {
         var csv = String()
-        csv += "Name:,\(name)\n" + "Subject:,\(subject.name)\n" + "Route:,\(route.name)\n"
+        csv += "Name:,\(name)\n" + "Subject:,\(subject.name)\n" + "Route:,\(route.name)\n\n"
         for drive in drives {
             let tempDrive = drive as! Drive
             csv += tempDrive.csv()
-            csv += "/n"
+            csv += "\n"
         }
         return csv
     }

@@ -36,7 +36,6 @@
         <relationship name="subject" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Subject" inverseName="templates" inverseEntity="Subject" syncable="YES"/>
     </entity>
     <entity name="Turn" representedClassName="BeingNikhil.Turn" syncable="YES">
-        <attribute name="dataString" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="duration" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="endLocation" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="endTime" optional="YES" attributeType="Date" syncable="YES"/>
@@ -52,6 +51,6 @@
         <element name="Route" positionX="-45" positionY="45" width="128" height="90"/>
         <element name="Subject" positionX="-36" positionY="54" width="128" height="105"/>
         <element name="Template" positionX="-45" positionY="90" width="128" height="135"/>
-        <element name="Turn" positionX="-36" positionY="45" width="128" height="180"/>
+        <element name="Turn" positionX="-36" positionY="45" width="128" height="165"/>
     </elements>
 </model>

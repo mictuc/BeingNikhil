@@ -25,16 +25,17 @@ class MapViewController: UIViewController {
     var routeName = String()
     
     /// radius in meters of starting view
-    let regionRadius: CLLocationDistance = 5000
+    let regionRadius: CLLocationDistance = 1000
     
     /// Initializes view controller and displays route on map
     override func viewDidLoad() {
         super.viewDidLoad()
         locations = sharedLocation.locations
         title = routeName
-        let centerLongitude = (locations[0].coordinate.longitude + locations[locations.count/2].coordinate.longitude) / 2
-        let centerLatitude = (locations[0].coordinate.latitude + locations[locations.count/2].coordinate.latitude) / 2
-        let initialLocation = CLLocation(latitude: centerLatitude, longitude: centerLongitude)
+//        let centerLongitude = (locations[0].coordinate.longitude + locations[locations.count/2].coordinate.longitude) / 2
+//        let centerLatitude = (locations[0].coordinate.latitude + locations[locations.count/2].coordinate.latitude) / 2
+//        let initialLocation = CLLocation(latitude: centerLatitude, longitude: centerLongitude)
+        let initialLocation = locations[0]
         centerMapOnLocation(initialLocation)
         addRoute()
     }
@@ -50,10 +51,14 @@ class MapViewController: UIViewController {
     func addRoute() {
         var coordinates = [CLLocationCoordinate2D]()
         for i in 0...locations.count-1 {
-            coordinates += [CLLocationCoordinate2DMake(locations[i].coordinate.latitude, locations[i].coordinate.latitude)]
+            //println(i)
+            coordinates.append(CLLocationCoordinate2DMake(locations[i].coordinate.latitude, locations[i].coordinate.latitude))
         }
-        let myPolyline = MKPolyline(coordinates: &coordinates, count: Int(locations.count))
-        mapView.addOverlay(myPolyline)
+        var geodesic = MKGeodesicPolyline(coordinates: &coordinates[0], count: locations.count)
+        self.mapView.addOverlay(geodesic)
+
+//        let myPolyline = MKPolyline(coordinates: &coordinates, count: Int(locations.count))
+//        mapView.addOverlay(myPolyline)
     }
 
 }

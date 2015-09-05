@@ -63,6 +63,7 @@ class ExportTableViewController: TableViewSuperClass, UITableViewDataSource, UIT
         for exportFile in exportFiles {
             objectsToShare.append(exportFile)
         }
+        exportFiles.removeAll(keepCapacity: false)
         let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
         self.presentViewController(activityVC, animated: true, completion: nil)
     }

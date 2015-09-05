@@ -9,11 +9,9 @@
 //
 
 import CoreData
+import CoreLocation
 
 class Turn: NSManagedObject {
-    /// Sensor data in a String format
-    @NSManaged var dataString: String
-
     /// Drive this turn was taken in
     @NSManaged var drive: Drive
 
@@ -51,11 +49,18 @@ class Turn: NSManagedObject {
         let coalescedStartTime = dateFormatter.stringFromDate(startTime)
         let coalescedEndTime = dateFormatter.stringFromDate(endTime)
         let coalescedDuration = duration
-        let coalescedStartLocation = startLocation.description
-        let coalescedEndLocation = endLocation.description
-        let coalescedTurnData = dataString
-        return "\(coalescedTurnCount),\(coalescedStartTime),\(coalescedTurnCount),\(coalescedDuration),"
-            + "\(coalescedStartLocation),\(coalescedEndLocation),\(coalescedTurnData)\n"
+        let coalescedStartLocation = startLocation as! CLLocation
+        let coalescedEndLocation = endLocation as! CLLocation
+        var coalescedTurnData = String()
+        let data = sensorData as! [Double]
+        for datum in data {
+            coalescedTurnData += "\(datum),"
+        }
+        
+        return "\(coalescedTurnCount),\(coalescedStartTime),\(coalescedEndTime),\(coalescedDuration),"
+            + "\(coalescedStartLocation.coordinate.latitude),\(coalescedStartLocation.coordinate.longitude),"
+            + "\(coalescedStartLocation.speed),\(coalescedEndLocation.coordinate.latitude),"
+            + "\(coalescedEndLocation.coordinate.longitude),\(coalescedEndLocation.speed),\(coalescedTurnData)\n"
     }
     
 }

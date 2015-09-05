@@ -55,8 +55,9 @@ class Drive: NSManagedObject {
             coalescedTurnData += turnMap[i]!.csv()
         }
         
-        return "Route:,\(subject.route.name)\n" + "Subject:,\(subject.name)\n" + "Starting Timestamp:,\(coalescedTimestamp)\n"
-            + "Duration:,\(coalescedDuration)\n" + "Turn Count:,\(coalescedTurnCount)\n" + "\(coalescedTurnData)\n"
+        return "Route:,\(subject.route.name),Subject:,\(subject.name)\n" + "Starting Timestamp:,\(coalescedTimestamp),"
+            + "Duration:,\(coalescedDuration),Turn Count:,\(coalescedTurnCount)\n" + "Turn Number,Start Time,End Time, Duration,"
+            + "Start Latitude,Start Longitude,Start Speed,End Latitude,End Longitude,End Speed,Raw Data\n" + "\(coalescedTurnData)\n"
     }
 
 }
