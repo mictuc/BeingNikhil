@@ -47,10 +47,10 @@ class TableViewSuperClass: UITableViewController {
         Fetches core data entities from the app based on the passed in parameters
         then sets coreDataArray to results
     
-        :param: entityName Name of entity type to fetch results for
-        :param: predicateDescription Description of predicate to filter fetch results––default is ""
-        :param: predicateObject Object to compare with predicate description––default is nil
-        :param: sortAttribute Attribute by which to sort fetch results
+        - parameter entityName: Name of entity type to fetch results for
+        - parameter predicateDescription: Description of predicate to filter fetch results––default is ""
+        - parameter predicateObject: Object to compare with predicate description––default is nil
+        - parameter sortAttribute: Attribute by which to sort fetch results
     */
     func fetchCoreData(entityName: String, predicateDescription: String = "", predicateObject: NSManagedObject? = nil, sortAttribute: String) {
         let fetchRequest = NSFetchRequest(entityName: entityName)
@@ -59,7 +59,7 @@ class TableViewSuperClass: UITableViewController {
             fetchRequest.predicate = predicate
         }
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: sortAttribute, ascending: true)]
-        if let fetchResults = managedObjectContext!.executeFetchRequest(fetchRequest, error: nil) as? [NSManagedObject] {
+        if let fetchResults = (try? managedObjectContext!.executeFetchRequest(fetchRequest)) as? [NSManagedObject] {
             coreDataArray = fetchResults
         }
     }
@@ -82,13 +82,13 @@ class TableViewSuperClass: UITableViewController {
         Formats cells based on coreDataArray, cellSubtitleEntity, and cellPredicateDescription
     */
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellID) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellID)!
         let entity = coreDataArray[indexPath.row]
         cell.textLabel!.text = entity.valueForKey(cellSortingAttribute) as? String
         let predicate = NSPredicate(format: cellPredicateDescritpion, entity)
         let fetchRequest = NSFetchRequest(entityName: cellSubtitleEntity)
         fetchRequest.predicate = predicate
-        if let fetchResults = managedObjectContext!.executeFetchRequest(fetchRequest, error: nil) as? [NSManagedObject] {
+        if let fetchResults = (try? managedObjectContext!.executeFetchRequest(fetchRequest)) as? [NSManagedObject] {
             cell.detailTextLabel?.text = "\(cellSubtitleEntity)s: \(fetchResults.count)"
         }
         return cell
@@ -97,12 +97,12 @@ class TableViewSuperClass: UITableViewController {
     /**
         Prompts user for name for new core data entity then creates and stores entity
     
-        :param: entityType Name for entity type to add
-        :param: attributes Array of attributes to be added to array in format [value, key, value, key,...]
-        :param: predicateDescription String description of predicate to filter when redisplaying data
-        :param: predicateObject Object to compare to predicateDescription when redisplaying data
-        :param: relationships Array of objects to be added to relation of new entity
-        :param: relationshipType Name of relationship for relationships to be added to
+        - parameter entityType: Name for entity type to add
+        - parameter attributes: Array of attributes to be added to array in format [value, key, value, key,...]
+        - parameter predicateDescription: String description of predicate to filter when redisplaying data
+        - parameter predicateObject: Object to compare to predicateDescription when redisplaying data
+        - parameter relationships: Array of objects to be added to relation of new entity
+        - parameter relationshipType: Name of relationship for relationships to be added to
     */
     func addEntity(entityType: String, attributes: [AnyObject], predicateDescription: String? = nil, predicateObject: NSManagedObject? = nil, relationships: [NSManagedObject]? = nil, relationshipType: String? = nil) {
         let namePrompt = UIAlertController(title: "Enter \(entityType) Name", message: nil, preferredStyle: .Alert)
@@ -121,7 +121,7 @@ class TableViewSuperClass: UITableViewController {
         namePrompt.addAction(UIAlertAction(title: "Ok", style: .Default,
             handler: { (action) -> Void in
                 if let textField = nameTextField {
-                    self.saveEntity(entityType, name: textField.text, attributes: attributes, predicateDescription: predicateDescription, predicateObject: predicateObject, relationships: relationships, relationshipType: relationshipType)
+                    self.saveEntity(entityType, name: textField.text!, attributes: attributes, predicateDescription: predicateDescription, predicateObject: predicateObject, relationships: relationships, relationshipType: relationshipType)
                 }
         }))
         
@@ -131,13 +131,13 @@ class TableViewSuperClass: UITableViewController {
     /**
         Creates and saves new core entity based on passed in parameters
     
-        :param: entityType Name for entity type to add
-        :param: name Name for new entity
-        :param: attributes Array of attributes to be added to array in format [value, key, value, key,...]
-        :param: predicateDescription String description of predicate to filter when redisplaying data
-        :param: predicateObject Object to compare to predicateDescription when redisplaying data
-        :param: relationships Array of objects to be added to relation of new entity
-        :param: relationshipType Name of relationship for relationships to be added to
+        - parameter entityType: Name for entity type to add
+        - parameter name: Name for new entity
+        - parameter attributes: Array of attributes to be added to array in format [value, key, value, key,...]
+        - parameter predicateDescription: String description of predicate to filter when redisplaying data
+        - parameter predicateObject: Object to compare to predicateDescription when redisplaying data
+        - parameter relationships: Array of objects to be added to relation of new entity
+        - parameter relationshipType: Name of relationship for relationships to be added to
     */
     func saveEntity(entityType: String, name: String, attributes: [AnyObject], predicateDescription: String? = nil, predicateObject: NSManagedObject? = nil, relationships: [NSManagedObject]? = nil, relationshipType: String? = nil) {
         let entity =  NSEntityDescription.entityForName(entityType, inManagedObjectContext: managedObjectContext!)
@@ -148,7 +148,7 @@ class TableViewSuperClass: UITableViewController {
                 relation.addObject(newEntity, forKey: relationshipType!)
             }
         }
-        for i in stride(from: 0, to: attributes.count, by: 2) {
+        for i in 0.stride(to: attributes.count, by: 2) {
             newEntity.setValue(attributes[i], forKey: attributes[i + 1] as! String)
         }
         appDelegate.saveContext()
@@ -176,7 +176,7 @@ class TableViewSuperClass: UITableViewController {
     /**
         Deletes a passed in drive, and its turns and templates
     
-        :param: drive Drive to be deleted with its turns and templates
+        - parameter drive: Drive to be deleted with its turns and templates
     */
     func deleteDriveData(drive: Drive){
         for turn in drive.turns {
@@ -191,7 +191,7 @@ class TableViewSuperClass: UITableViewController {
     /**
         Deletes a passed in subject and its drives
     
-        :param: subject Subject to be deleted with its drives
+        - parameter subject: Subject to be deleted with its drives
     */
     func deleteSubjectData(subject: Subject) {
         for drive in subject.drives {
@@ -203,7 +203,7 @@ class TableViewSuperClass: UITableViewController {
     /**
         Deletes a passed in route and its subjects
     
-        :param: route Route to be deleted with its subjects
+        - parameter route: Route to be deleted with its subjects
     */
     func deleteRouteData(route: Route) {
         for subject in route.subjects {

@@ -13,7 +13,7 @@ import CoreData
 
 /// TableViewController to display saved routes
 /// For more methods and variables see TableViewSuperClass
-class RouteTableViewController: TableViewSuperClass, UITableViewDataSource, UITableViewDelegate  {
+class RouteTableViewController: TableViewSuperClass  {
     
     /// ID for segue to subjects
     let subjectSegueIdentifier = "subjectSegue"

@@ -15,7 +15,7 @@ import CoreLocation
 
 /// Table View to display drives for the selected subject
 /// For more methods and variables see TableViewSuperClass
-class DriveTableViewController: TableViewSuperClass, UITableViewDataSource, UITableViewDelegate {
+class DriveTableViewController: TableViewSuperClass {
     
     /// Button on toolbar to test/make template or compare drive to template
     @IBOutlet var compareButton: UIBarButtonItem!
@@ -48,7 +48,7 @@ class DriveTableViewController: TableViewSuperClass, UITableViewDataSource, UITa
     
     /// Formats the cells with the data from coreDataArray
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell") as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell")!
         let drive = coreDataArray[indexPath.row] as! Drive
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "MM-dd-YYYY h:mm a"
@@ -71,7 +71,6 @@ class DriveTableViewController: TableViewSuperClass, UITableViewDataSource, UITa
     /// When a cell is selected, it indicates that the drive is selected, can also unselect
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath)
-        let drive = coreDataArray[indexPath.row] as! Drive
         if (cell?.accessoryType == UITableViewCellAccessoryType.Checkmark){
             cell!.accessoryType = UITableViewCellAccessoryType.None
         }else{

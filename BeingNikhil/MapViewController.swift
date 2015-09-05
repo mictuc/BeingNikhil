@@ -54,7 +54,7 @@ class MapViewController: UIViewController {
             //println(i)
             coordinates.append(CLLocationCoordinate2DMake(locations[i].coordinate.latitude, locations[i].coordinate.latitude))
         }
-        var geodesic = MKGeodesicPolyline(coordinates: &coordinates[0], count: locations.count)
+        let geodesic = MKGeodesicPolyline(coordinates: &coordinates[0], count: locations.count)
         self.mapView.addOverlay(geodesic)
 
 //        let myPolyline = MKPolyline(coordinates: &coordinates, count: Int(locations.count))

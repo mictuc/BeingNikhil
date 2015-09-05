@@ -80,7 +80,7 @@ class MainViewController: UIViewController {
     /**
     Updates the DTW label in the Main View Controller
     
-    :param: notification to update
+    - parameter notification: to update
     */
     func updateDTW(notification: NSNotification) {
         labelDTW.text = String(format: "DTW: %.2f", sharedMotion.DTW)
@@ -89,7 +89,7 @@ class MainViewController: UIViewController {
     /**
         Controls toggle switch for the app mode
     
-        :param: UISegmentedControl Mode toggle button
+        - parameter UISegmentedControl: Mode toggle button
     */
     @IBAction func modeType(sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
@@ -107,7 +107,7 @@ class MainViewController: UIViewController {
     /**
         Controls toggle switch for the map view
         
-        :param: UISegmentedControl Map type toggle button
+        - parameter UISegmentedControl: Map type toggle button
     */
     @IBAction func mapType(sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
@@ -133,8 +133,8 @@ class MainViewController: UIViewController {
     /**
     Determines whether or not the user is storing a drive or not
     
-    :param: UIStoryboardSegue Segue about to perform
-    :param: AnyObject Sender for the segue
+    - parameter UIStoryboardSegue: Segue about to perform
+    - parameter AnyObject: Sender for the segue
     */
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if (segue.identifier == "storeDriveSegue") {
@@ -147,7 +147,7 @@ class MainViewController: UIViewController {
     /**
     Unwind segue back to view controller
     
-    :param: UIStoryboardSegue Unwind segue
+    - parameter UIStoryboardSegue: Unwind segue
     */
     @IBAction func unwindToVC(segue: UIStoryboardSegue) {
     }

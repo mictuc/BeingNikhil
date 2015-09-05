@@ -40,7 +40,7 @@ class Turn: NSManagedObject {
     /**
     Creates a csv–formatted String with the Turn's data
     
-    :returns: String csv formatted data
+    - returns: String csv formatted data
     */
     func csv() -> String {
         let dateFormatter = NSDateFormatter()

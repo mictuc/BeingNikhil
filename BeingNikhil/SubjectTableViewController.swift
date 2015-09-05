@@ -13,7 +13,7 @@ import CoreData
 
 /// Table View to display subjects for the selected Route
 /// For more methods and variables see TableViewSuperClass
-class SubjectTableViewController: TableViewSuperClass, UITableViewDataSource, UITableViewDelegate{
+class SubjectTableViewController: TableViewSuperClass {
     
     /// Segue ID to transition to drive view controller
     let driveSegueIdentifier = "driveSegue"

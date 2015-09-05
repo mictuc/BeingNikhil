@@ -30,8 +30,8 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     /// Updates locations
-    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
-        if let location = locations.first as? CLLocation {
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.first {
             self.locations.append(location)
         }
     }

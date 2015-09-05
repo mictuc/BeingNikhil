@@ -35,7 +35,7 @@ class Drive: NSManagedObject {
     /**
         Creates a csv–formatted String with the Drive's data
     
-        :returns: String csv formatted data
+        - returns: String csv formatted data
     */
     func csv() -> String {
         let dateFormatter = NSDateFormatter()

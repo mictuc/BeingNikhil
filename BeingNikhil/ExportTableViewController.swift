@@ -11,7 +11,7 @@ import CoreData
 
 /// TableViewController to display data to be exported
 /// For more methods and variables see TableViewSuperClass
-class ExportTableViewController: TableViewSuperClass, UITableViewDataSource, UITableViewDelegate  {
+class ExportTableViewController: TableViewSuperClass  {
     
     @IBOutlet var exportTable: [UITableView]!
     
@@ -45,7 +45,7 @@ class ExportTableViewController: TableViewSuperClass, UITableViewDataSource, UIT
     @IBAction func exportData(sender: AnyObject) {
         var indexPaths = [NSIndexPath]()
         for section in 0...sections.count - 1 {
-            for row in 0...data[sections[section]!]!.count - 1 {
+            for var row = 0; row < data[sections[section]!]!.count; ++row {
                 let cellPath = NSIndexPath(forRow: row, inSection: section)
                 let cell = tableView.cellForRowAtIndexPath(cellPath)
                 if cell?.accessoryType == UITableViewCellAccessoryType.Checkmark {
@@ -53,7 +53,7 @@ class ExportTableViewController: TableViewSuperClass, UITableViewDataSource, UIT
                 }
             }
         }
-        println(indexPaths.count)
+        print(indexPaths.count)
         for indexPath in indexPaths {
             exportCSVFile(data[sections[indexPath.section]!]![indexPath.row])
         }
@@ -80,10 +80,16 @@ class ExportTableViewController: TableViewSuperClass, UITableViewDataSource, UIT
             fileName = entity.valueForKey("name") as! String
         }
         let exportFilePath = NSTemporaryDirectory() + "\(fileName).csv"
-        exportFileURL = NSURL(fileURLWithPath: exportFilePath)!
+        exportFileURL = NSURL(fileURLWithPath: exportFilePath)
         NSFileManager.defaultManager().createFileAtPath(exportFilePath, contents: NSData(), attributes: nil)
         var fileHandleError: NSError? = nil
-        let fileHandle = NSFileHandle(forWritingToURL: exportFileURL, error: &fileHandleError)
+        let fileHandle: NSFileHandle?
+        do {
+            fileHandle = try NSFileHandle(forWritingToURL: exportFileURL)
+        } catch var error as NSError {
+            fileHandleError = error
+            fileHandle = nil
+        }
         if let fileHandle = fileHandle {
             var csvData = NSData()
             if entity.isKindOfClass(Template) {
@@ -98,9 +104,9 @@ class ExportTableViewController: TableViewSuperClass, UITableViewDataSource, UIT
             }
             fileHandle.writeData(csvData)
             fileHandle.closeFile()
-            println("Export Path: \(exportFilePath)")
+            print("Export Path: \(exportFilePath)")
         } else {
-            println("ERROR: \(fileHandleError)")
+            print("ERROR: \(fileHandleError)")
         }
         exportFiles.append(exportFileURL)
     }
@@ -120,7 +126,7 @@ class ExportTableViewController: TableViewSuperClass, UITableViewDataSource, UIT
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let section = sections[indexPath.section]!
         let entity = data[section]![indexPath.row]
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) 
         if section == "Drive" {
             let dateFormatter = NSDateFormatter()
             dateFormatter.dateFormat = "MM-dd h:mm a"

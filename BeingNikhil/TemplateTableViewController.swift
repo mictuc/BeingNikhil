@@ -14,7 +14,7 @@ import CoreData
 
 /// Table View to display templates for the selected route
 /// For more methods and variables see TableViewSuperClass
-class TemplateTableViewController: TableViewSuperClass, UITableViewDataSource, UITableViewDelegate{
+class TemplateTableViewController: TableViewSuperClass {
     
     let exportSegueIdentifier = "exportDataSegue"
     
@@ -33,7 +33,7 @@ class TemplateTableViewController: TableViewSuperClass, UITableViewDataSource, U
     
     /// Formates each cell with data from the coreDataArray
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell") as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell")!
         let template = coreDataArray[indexPath.row] as! Template
         cell.textLabel!.text = template.name
         cell.detailTextLabel?.text = "Route: \(template.route.name)  Subject: \(template.subject.name)    # Drives: \(template.drives.count)"
@@ -54,7 +54,6 @@ class TemplateTableViewController: TableViewSuperClass, UITableViewDataSource, U
     /// Selects or deselects template at a given row
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath)
-        let template = coreDataArray[indexPath.row] as! Template
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         if (cell?.accessoryType == UITableViewCellAccessoryType.Checkmark){
             cell!.accessoryType = UITableViewCellAccessoryType.None

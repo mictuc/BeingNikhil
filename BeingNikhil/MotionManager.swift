@@ -46,7 +46,7 @@ class MotionManager: NSObject {
     var turnCount = 0
     
     /// Turn event to be recorded
-    lazy var turn = Turn()
+    lazy var turn = NSManagedObject() as! Turn
     
     /// Timestamp for beginning of drive
     var startMonitoringDate: NSDate!
@@ -55,7 +55,7 @@ class MotionManager: NSObject {
     var deviceMotions = [CMDeviceMotion]()
     
     /// Drive event to be recorded
-    lazy var drive = Drive()
+    lazy var drive = NSManagedObject() as! Drive
 
     /// Updates the DTW label in the Main View Controller
     func updateDTW() {
@@ -65,9 +65,9 @@ class MotionManager: NSObject {
     /**
         Uses a low pass filter to eliminate sensor noise
     
-        :param: x An array of Doubles to be filtered
+        - parameter x: An array of Doubles to be filtered
     
-        :returns: An array of Doubles that have been filtered
+        - returns: An array of Doubles that have been filtered
     */
     func lowPassFilter(x: [Double]) -> [Double] {
         let n = x.count, dt = 0.04, RC = 1 / M_2_PI, alpha = dt / (RC + dt)
@@ -84,10 +84,10 @@ class MotionManager: NSObject {
     /**
         Updates the simple moving average for the rotational movement around the z-axis
     
-        :param: z Data from the z-axis gyroscope (adjusted for reference frame)
+        - parameter z: Data from the z-axis gyroscope (adjusted for reference frame)
     */
     func updateSimpleMovingAverageOfRotationalEnergy(z: Double) {
-        let k = 25
+        let k = 15
         
         rotationRates.append(z)
         
@@ -105,11 +105,11 @@ class MotionManager: NSObject {
         Performs dynamic time warping algorithm to two arrays of sensor data
         then updates DTW value
     
-        :param: s Array of sensor data for first turn
-        :param: t Array of sensor data for second turn
+        - parameter s: Array of sensor data for first turn
+        - parameter t: Array of sensor data for second turn
     */
     func dynamicTimeWarping(s: [Double], t: [Double]) {
-        var n = s.count, m = t.count
+        let n = s.count, m = t.count
         
         if (n == 0 || m == 0) { return }
         
@@ -132,7 +132,7 @@ class MotionManager: NSObject {
         Creates a new turn event when the turn starts.
         Adds data to turn event when turn stops
     
-        :param: z Data from the z-axis gyroscope (adjusted for reference frame)
+        - parameter z: Data from the z-axis gyroscope (adjusted for reference frame)
     */
     func detectDeviceRotationEndpoints(z: Double) {
         updateSimpleMovingAverageOfRotationalEnergy(z)
@@ -181,19 +181,19 @@ class MotionManager: NSObject {
         let fetchDrive = NSFetchRequest(entityName: "Drive")
         fetchDrive.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
         
-        if let fetchedDrives = managedObjectContext.executeFetchRequest(fetchDrive, error: nil) as? [Drive] {
+        if let fetchedDrives = (try? managedObjectContext.executeFetchRequest(fetchDrive)) as? [Drive] {
             if let drive = fetchedDrives.last {
-                print("date: \(drive.timestamp) duration: \(drive.duration)")
+                print("date: \(drive.timestamp) duration: \(drive.duration)", terminator: "")
             }
         }
         let fetchMotion = NSFetchRequest(entityName: "Turn")
         fetchMotion.predicate = NSPredicate(format: "drive.timestamp == %@", startMonitoringDate)
         
-        if let fetchedMotions = managedObjectContext.executeFetchRequest(fetchMotion, error: nil) as? [Turn] {
+        if let fetchedMotions = (try? managedObjectContext.executeFetchRequest(fetchMotion)) as? [Turn] {
             for result in fetchedMotions {
-                print(result.turnNumber)
+                print(result.turnNumber, terminator: "")
             }
-            print("")
+            print("", terminator: "")
         }
     }
     
@@ -209,12 +209,12 @@ class MotionManager: NSObject {
         if manager.deviceMotionAvailable {
             manager.deviceMotionUpdateInterval = 0.04
             
-            manager.startDeviceMotionUpdatesToQueue(NSOperationQueue.currentQueue()) {
-                [weak self] (data: CMDeviceMotion!, error: NSError!) in
+            manager.startDeviceMotionUpdatesToQueue(NSOperationQueue.mainQueue()) {
+                [weak self] (data: CMDeviceMotion?, error: NSError?) in
                 
                 //TRY WITHOUT REFERENCE FRAME CHANGE
-                self!.detectDeviceRotationEndpoints(data.rotationRateInReferenceFrame().z)
-                self!.deviceMotions.append(data)
+                self!.detectDeviceRotationEndpoints(data!.rotationRateInReferenceFrame().z)
+                self!.deviceMotions.append(data!)
             }
         }
     }
@@ -241,7 +241,7 @@ class MotionManager: NSObject {
         let sortDescriptor = NSSortDescriptor(key: "timestamp", ascending: true)
         let templateDrives = template.drives.sortedArrayUsingDescriptors([sortDescriptor])
 
-        for i in 1...templateDrives.count {
+        for _ in 1...templateDrives.count {
             turnScores.append(Array(count: drive.turns.count, repeatedValue:Double()))
         }
         
