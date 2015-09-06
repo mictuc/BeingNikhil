@@ -6,6 +6,7 @@
 //  Primarily used to store core data objects
 //
 //  Created by David M Sirkin on 5/2/15.
+//  Revised by Michael P Tucker on 9/5/15
 //  Copyright (c) 2015 Stanford University. All rights reserved.
 //
 
@@ -96,9 +97,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if coordinator == nil {
             return nil
         }
-        //var queue = NSPrivateQueueConcurrencyType
-        var managedObjectContext = NSManagedObjectContext()
-       // var managedObjectContext = init(managedObjectContext ct: NSManagedObjectContextConcurrencyType)
+        var managedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
         managedObjectContext.persistentStoreCoordinator = coordinator
         return managedObjectContext
     }()

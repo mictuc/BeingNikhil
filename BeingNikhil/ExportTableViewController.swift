@@ -86,7 +86,7 @@ class ExportTableViewController: TableViewSuperClass  {
         let fileHandle: NSFileHandle?
         do {
             fileHandle = try NSFileHandle(forWritingToURL: exportFileURL)
-        } catch var error as NSError {
+        } catch let error as NSError {
             fileHandleError = error
             fileHandle = nil
         }

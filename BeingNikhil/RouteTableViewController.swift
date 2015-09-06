@@ -19,7 +19,6 @@ class RouteTableViewController: TableViewSuperClass  {
     let subjectSegueIdentifier = "subjectSegue"
     
     
-    //FIX back button hiding
     /// If user is storing drive, title will be different, then fetches Routes
     override func viewDidLoad() {
         super.viewDidLoad()
