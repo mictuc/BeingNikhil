@@ -144,10 +144,10 @@ class DriveTableViewController: TableViewSuperClass {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == mapSegue {
             let indexPaths = getSelectedCells()
-            print(coreDataArray[indexPaths[0].row])
-            sharedView.locations = coreDataArray[indexPaths[0].row].valueForKey("locations") as! [(CLLocation)]
+            sharedView.driveID = coreDataArray[indexPaths[0].row].objectID
+            //sharedView.locations = coreDataArray[indexPaths[0].row].valueForKey("locations") as! [(CLLocation)]
 //            sharedLocation.locations = coreDataArray[0].valueForKey("locations") as! [(CLLocation)]
-            sharedView.routeID = coreDataArray[0].valueForKey("subject")!.valueForKey("Route")!.objectID
+            //sharedView.routeID = coreDataArray[0].valueForKey("subject")!.valueForKey("Route")!.objectID
         } else if segue.identifier == templateSegueIdentifier {
             var comparisonDrives = [NSManagedObject]()
             let indexPaths = getSelectedCells()

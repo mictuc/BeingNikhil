@@ -87,7 +87,7 @@ class MotionManager: NSObject {
         - parameter z: Data from the z-axis gyroscope (adjusted for reference frame)
     */
     func updateSimpleMovingAverageOfRotationalEnergy(z: Double) {
-        let k = 15
+        let k = 20
         
         rotationRates.append(z)
         
@@ -153,7 +153,7 @@ class MotionManager: NSObject {
                 dynamicTimeWarping(priorRotationRatesInTurn, t: rotationRatesInTurn)
                 updateDTW()
                 priorRotationRatesInTurn = rotationRatesInTurn
-                turn.sensorData = priorRotationRatesInTurn
+                turn.sensorData = lowPassFilter(priorRotationRatesInTurn)
                 turn.turnNumber = turnCount
                 turn.drive = drive
                 turn.endTime = NSDate()
