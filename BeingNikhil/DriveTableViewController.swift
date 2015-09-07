@@ -21,7 +21,7 @@ class DriveTableViewController: TableViewSuperClass {
     @IBOutlet var compareButton: UIBarButtonItem!
     
     /// Segue ID to transition to map view of drive's route
-    var mapSegue = "Map Segue"
+    var mapSegue = "mapSegue"
     
     /// Segue ID to transition to table view of templates for route
     var templateSegueIdentifier = "templateSegue"
@@ -143,7 +143,10 @@ class DriveTableViewController: TableViewSuperClass {
     /// If segue is going to map, sets data for route to be displayed, otherwise segues to template view
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == mapSegue {
-            sharedLocation.locations = coreDataArray[0].valueForKey("locations") as! [(CLLocation)]
+            let indexPaths = getSelectedCells()
+            print(coreDataArray[indexPaths[0].row])
+            sharedView.locations = coreDataArray[indexPaths[0].row].valueForKey("locations") as! [(CLLocation)]
+//            sharedLocation.locations = coreDataArray[0].valueForKey("locations") as! [(CLLocation)]
             sharedView.routeID = coreDataArray[0].valueForKey("subject")!.valueForKey("Route")!.objectID
         } else if segue.identifier == templateSegueIdentifier {
             var comparisonDrives = [NSManagedObject]()

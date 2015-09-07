@@ -9,6 +9,7 @@
 //
 
 import CoreData
+import CoreLocation
 
 /// Manager for view controllers
 class ViewManager: NSObject {
@@ -34,6 +35,8 @@ class ViewManager: NSObject {
     
     /// The array of drives to compare to a template
     var comparisonDrives = [NSManagedObject]()
+    
+    var locations = [CLLocation]()
 }
 
 /// ViewManager object to be used by other classes
