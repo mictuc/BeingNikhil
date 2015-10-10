@@ -19,6 +19,8 @@
 		BB1002F61B98E5200091EAF6 /* Comparison.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1002F51B98E5200091EAF6 /* Comparison.swift */; };
 		BB1002FA1B98F5E50091EAF6 /* ExportTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1002F91B98F5E50091EAF6 /* ExportTableViewController.swift */; };
 		BB1C2B611B96208B007D5F11 /* TableViewSuperClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1C2B601B96208B007D5F11 /* TableViewSuperClass.swift */; };
+		BBA236691BA23BAC0041B4D0 /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA236681BA23BAC0041B4D0 /* GraphView.swift */; };
+		BBA2366B1BA258730041B4D0 /* TestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA2366A1BA258730041B4D0 /* TestController.swift */; };
 		BBBAB99A1B94E75800685054 /* CoreDataControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBBAB9991B94E75800685054 /* CoreDataControl.swift */; };
 		BBBAB99C1B9501E800685054 /* TemplateTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBBAB99B1B9501E800685054 /* TemplateTableViewController.swift */; };
 		C8451DA81B02547C0001D730 /* SegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8451DA71B02547C0001D730 /* SegmentedControl.swift */; };
@@ -60,6 +62,8 @@
 		BB1002F51B98E5200091EAF6 /* Comparison.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comparison.swift; sourceTree = "<group>"; };
 		BB1002F91B98F5E50091EAF6 /* ExportTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExportTableViewController.swift; sourceTree = "<group>"; };
 		BB1C2B601B96208B007D5F11 /* TableViewSuperClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewSuperClass.swift; sourceTree = "<group>"; };
+		BBA236681BA23BAC0041B4D0 /* GraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
+		BBA2366A1BA258730041B4D0 /* TestController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestController.swift; sourceTree = "<group>"; };
 		BBBAB9991B94E75800685054 /* CoreDataControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataControl.swift; sourceTree = "<group>"; };
 		BBBAB99B1B9501E800685054 /* TemplateTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemplateTableViewController.swift; sourceTree = "<group>"; };
 		C8451DA71B02547C0001D730 /* SegmentedControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentedControl.swift; sourceTree = "<group>"; };
@@ -102,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				C8DA67A81AF4C1A7001D9F37 /* MainViewController.swift */,
+				BBA2366A1BA258730041B4D0 /* TestController.swift */,
 				08A9C1691B83FB7600747B40 /* RouteTableViewController.swift */,
 				087F2D531B869A000066833E /* SubjectTableViewController.swift */,
 				087F2D551B869A800066833E /* DriveTableViewController.swift */,
@@ -169,6 +174,7 @@
 			children = (
 				C8DA67A31AF4C1A7001D9F37 /* AppDelegate.swift */,
 				C8DA67AA1AF4C1A7001D9F37 /* Main.storyboard */,
+				BBA236681BA23BAC0041B4D0 /* GraphView.swift */,
 				BBCB660F1B9765270017E789 /* View Controllers */,
 				C8451DB11B025A340001D730 /* Managers */,
 				C8451DB01B0259DF0001D730 /* Extensions */,
@@ -330,10 +336,12 @@
 				C8DA67C91AF4C6D3001D9F37 /* LocationManager.swift in Sources */,
 				78D697F61B8FCFE9007FEB52 /* ViewManager.swift in Sources */,
 				BB1C2B611B96208B007D5F11 /* TableViewSuperClass.swift in Sources */,
+				BBA2366B1BA258730041B4D0 /* TestController.swift in Sources */,
 				BBBAB99A1B94E75800685054 /* CoreDataControl.swift in Sources */,
 				C8DA67A41AF4C1A7001D9F37 /* AppDelegate.swift in Sources */,
 				C8D893A81AF9D072006DDF2C /* ReferenceFrame.swift in Sources */,
 				087F2D501B8693EE0066833E /* Route.swift in Sources */,
+				BBA236691BA23BAC0041B4D0 /* GraphView.swift in Sources */,
 				08C794491B864F3A004F4AF7 /* Turn.swift in Sources */,
 				087F2D541B869A000066833E /* SubjectTableViewController.swift in Sources */,
 				BB1002F61B98E5200091EAF6 /* Comparison.swift in Sources */,
@@ -475,6 +483,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = BeingNikhil/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "stanford.edu.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -493,6 +502,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = BeingNikhil/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "stanford.edu.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";

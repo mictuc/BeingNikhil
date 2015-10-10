@@ -42,6 +42,12 @@ class MotionManager: NSObject {
     /// Array of z-axis gyroscope rates for the previous turn
     var priorRotationRatesInTurn = [Double](count: 1, repeatedValue: 0)
     
+    /// Array of the lateral accelerometer rates for a given turn
+    var lateralAccelerationInTurn = [Double]()
+    
+    /// Array of the longitudinal accelerometer rates for a given turn
+    var longitudinalAccelerationInTurn = [Double]()
+    
     /// Number of turns in a drive
     var turnCount = 0
     
@@ -108,7 +114,7 @@ class MotionManager: NSObject {
         - parameter s: Array of sensor data for first turn
         - parameter t: Array of sensor data for second turn
     */
-    func dynamicTimeWarping(s: [Double], t: [Double]) {
+    func dynamicTimeWarping(s: [Double], t: [Double], y: [Bouble], u:[Double] / DATA) {
         let n = s.count, m = t.count
         
         if (n == 0 || m == 0) { return }
@@ -119,7 +125,7 @@ class MotionManager: NSObject {
         
         for i in 1...n {
             for j in 1...m {
-                let cost = abs(s[i-1] - t[j-1])
+                let cost = abs(pow(s[i-1] - t[j-1],2))
                 //Euclidean distance function for 2 dimensions of data input
                 DTW[i][j] = cost + min(DTW[i-1][j], DTW[i][j-1], DTW[i-1][j-1])
             }
@@ -134,6 +140,7 @@ class MotionManager: NSObject {
     
         - parameter z: Data from the z-axis gyroscope (adjusted for reference frame)
     */
+    ///UPDATE THIS W/ ACCELERATION
     func detectDeviceRotationEndpoints(z: Double) {
         updateSimpleMovingAverageOfRotationalEnergy(z)
         let tU = 0.1, tL = 0.05
@@ -213,8 +220,9 @@ class MotionManager: NSObject {
                 [weak self] (data: CMDeviceMotion?, error: NSError?) in
                 
                 //TRY WITHOUT REFERENCE FRAME CHANGE
-                self!.detectDeviceRotationEndpoints(data!.rotationRateInReferenceFrame().z)
-                self!.deviceMotions.append(data!)
+                self!.detectDeviceRotationEndpoints(data!)
+                //self!.deviceMotions.append(data!)
+                //data?.userAcceleration.x
             }
         }
     }

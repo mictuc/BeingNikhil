@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8187.4" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="b0f-MK-Q5s">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="b0f-MK-Q5s">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8151.3"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
     </dependencies>
     <scenes>
         <!--Export Menu-->
@@ -248,6 +248,54 @@
             </objects>
             <point key="canvasLocation" x="2554" y="1468"/>
         </scene>
+        <!--Test Controller-->
+        <scene sceneID="GtX-RI-iyi">
+            <objects>
+                <viewController id="CpJ-iK-eTk" customClass="TestController" customModule="BeingNikhil" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="2gA-ox-AJ6"/>
+                        <viewControllerLayoutGuide type="bottom" id="1z3-Zo-YG7"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="e09-8O-9S6">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vmP-NJ-HeD" userLabel="Container View">
+                                <rect key="frame" x="57" y="78" width="228" height="208"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dh5-Nk-07h" userLabel="Graph View" customClass="GraphView" customModule="BeingNikhil" customModuleProvider="target">
+                                        <rect key="frame" x="-8" y="-10" width="244" height="226"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="startColor">
+                                                <color key="value" red="0.98039215690000003" green="0.91372549020000005" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="endColor">
+                                                <color key="value" red="0.98823529409999999" green="0.30980392159999998" blue="0.031372549020000001" alpha="1" colorSpace="calibratedRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                    </view>
+                    <navigationItem key="navigationItem" id="LSR-Ko-Gex">
+                        <barButtonItem key="leftBarButtonItem" title="Item" id="BAK-mA-zP0">
+                            <connections>
+                                <action selector="buttonPressed:" destination="CpJ-iK-eTk" id="b98-18-y2Q"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="containerView" destination="vmP-NJ-HeD" id="6q1-IG-vSa"/>
+                        <outlet property="graphView" destination="dh5-Nk-07h" id="SQG-Ke-PKh"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Eje-tz-2Gu" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2581" y="-65"/>
+        </scene>
         <!--Map View-->
         <scene sceneID="Bce-q5-vxU">
             <objects>
@@ -369,6 +417,7 @@
                         <toolbar key="tableFooterView" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="9gR-1l-qAJ">
                             <rect key="frame" x="0.0" y="130" width="600" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                            <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             <items>
                                 <barButtonItem title="Compare" id="q1G-Xm-G1f">
                                     <connections>
@@ -416,6 +465,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6vH-Qk-2de" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3339" y="717"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Yvq-Sb-Dqp">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="1hv-zy-yux" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="9nG-4u-GKO">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="CpJ-iK-eTk" kind="relationship" relationship="rootViewController" id="nsr-ox-Mae"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JOa-Dy-S6q" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1769" y="-65"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>

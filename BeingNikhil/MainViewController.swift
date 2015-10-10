@@ -54,7 +54,6 @@ class MainViewController: UIViewController {
         
         segmentedControl.addTarget(self, action: "mapType:", forControlEvents: .ValueChanged)
         segmentedControl.selectedSegmentIndex = 0
-        
         toolbarItems?.insert(UIBarButtonItem(customView: segmentedControl as UIView), atIndex: 2)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateDTW:", name: "DTW", object: nil)
