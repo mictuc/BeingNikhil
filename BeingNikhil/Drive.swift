@@ -29,6 +29,9 @@ class Drive: NSManagedObject {
     /// Turn events during the drive
     @NSManaged var turns: NSOrderedSet
     
+    /// Rotation matrix to re–orient data in newtonian frame
+    @NSManaged var rm: AnyObject
+    
     /// Subject who drove the drive
     @NSManaged var subject: Subject
     

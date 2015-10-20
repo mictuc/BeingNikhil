@@ -77,9 +77,9 @@ class MainViewController: UIViewController {
     }
     
     /**
-    Updates the DTW label in the Main View Controller
-    
-    - parameter notification: to update
+        Updates the DTW label in the Main View Controller
+        
+        - parameter notification: to update
     */
     func updateDTW(notification: NSNotification) {
         labelDTW.text = String(format: "DTW: %.2f", sharedMotion.DTW)

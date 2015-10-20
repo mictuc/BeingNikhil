@@ -10,6 +10,7 @@
 
 import CoreData
 import CoreLocation
+import CoreMotion
 
 class Turn: NSManagedObject {
     /// Drive this turn was taken in
@@ -19,7 +20,7 @@ class Turn: NSManagedObject {
     @NSManaged var duration: NSNumber
 
     /// Raw data from the gyroscopes and accelerometers
-    @NSManaged var sensorData: AnyObject
+    @NSManaged var sensorData: [CMDeviceMotion]
 
     /// Turn number in drive
     @NSManaged var turnNumber: NSNumber
@@ -52,10 +53,11 @@ class Turn: NSManagedObject {
         let coalescedStartLocation = startLocation as! CLLocation
         let coalescedEndLocation = endLocation as! CLLocation
         var coalescedTurnData = String()
-        let data = sensorData as! [Double]
-        for datum in data {
-            coalescedTurnData += "\(datum),"
-        }
+        
+//        for datum in sensorData {
+//            coalescedTurnData += "\(datum),"
+//            
+//        }
         
         return "\(coalescedTurnCount),\(coalescedStartTime),\(coalescedEndTime),\(coalescedDuration),"
             + "\(coalescedStartLocation.coordinate.latitude),\(coalescedStartLocation.coordinate.longitude),"

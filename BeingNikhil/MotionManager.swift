@@ -62,31 +62,36 @@ class MotionManager: NSObject {
     
     /// Drive event to be recorded
     lazy var drive = NSManagedObject() as! Drive
+    
+    /// Rotation Matrix oriented by gravity and a forward vector (assumed to be the first movement)
+    var rm = [[Double]]()
 
     /// Updates the DTW label in the Main View Controller
     func updateDTW() {
         NSNotificationCenter.defaultCenter().postNotificationName("DTW", object: nil)
     }
     
-    /**
-        Uses a low pass filter to eliminate sensor noise
-    
-        - parameter x: An array of Doubles to be filtered
-    
-        - returns: An array of Doubles that have been filtered
-    */
-    func lowPassFilter(x: [Double]) -> [Double] {
-        let n = x.count, dt = 0.04, RC = 1 / M_2_PI, alpha = dt / (RC + dt)
-        
-        var y = [Double](count: n, repeatedValue: 0)
-        
-        y[0] = x[0]
-        for i in 1..<n {
-            y[i] = alpha * x[i] + (1 - alpha) * y[i - 1]
-        }
-        return y
-    }
-    
+//    THE LOW PASS FILTER IS NO LONGER BEING USED / NEEDED
+//    /**
+//
+//        Uses a low pass filter to eliminate sensor noise
+//    
+//        - parameter x: An array of Doubles to be filtered
+//    
+//        - returns: An array of Doubles that have been filtered
+//    */
+//    func lowPassFilter(x: [Double]) -> [Double] {
+//        let n = x.count, dt = 0.04, RC = 1 / M_2_PI, alpha = dt / (RC + dt)
+//        
+//        var y = [Double](count: n, repeatedValue: 0)
+//        
+//        y[0] = x[0]
+//        for i in 1..<n {
+//            y[i] = alpha * x[i] + (1 - alpha) * y[i - 1]
+//        }
+//        return y
+//    }
+//    
     /**
         Updates the simple moving average for the rotational movement around the z-axis
     
@@ -114,7 +119,7 @@ class MotionManager: NSObject {
         - parameter s: Array of sensor data for first turn
         - parameter t: Array of sensor data for second turn
     */
-    func dynamicTimeWarping(s: [Double], t: [Double], y: [Bouble], u:[Double] / DATA) {
+    func dynamicTimeWarping(s: [Double], t: [Double], y: [Double], u:[Double]) { //change to just data
         let n = s.count, m = t.count
         
         if (n == 0 || m == 0) { return }
@@ -141,33 +146,36 @@ class MotionManager: NSObject {
         - parameter z: Data from the z-axis gyroscope (adjusted for reference frame)
     */
     ///UPDATE THIS W/ ACCELERATION
-    func detectDeviceRotationEndpoints(z: Double) {
+    func detectDeviceRotationEndpoints(motion: CMDeviceMotion) {
+        let z = motion.rotationRateInReferenceFrame().z
         updateSimpleMovingAverageOfRotationalEnergy(z)
         let tU = 0.1, tL = 0.05
         
         if SMA > tU {
             if priorSMA <= tU {
+                print("new turn")
                 turnCount++
                 rotationRatesInTurn = rotationRates
                 turn = NSEntityDescription.insertNewObjectForEntityForName("Turn", inManagedObjectContext: managedObjectContext) as! Turn
                 turn.startLocation = sharedLocation.locations[sharedLocation.locations.endIndex - 1]
                 turn.startTime = NSDate()
+                deviceMotions = [CMDeviceMotion]()
+                deviceMotions.append(motion)
             } else {
                 rotationRatesInTurn.append(z)
+                deviceMotions.append(motion)
             }
-        } else if SMA < tL {
-            if priorSMA >= tL {
-                dynamicTimeWarping(priorRotationRatesInTurn, t: rotationRatesInTurn)
-                updateDTW()
-                priorRotationRatesInTurn = rotationRatesInTurn
-                turn.sensorData = lowPassFilter(priorRotationRatesInTurn)
-                turn.turnNumber = turnCount
-                turn.drive = drive
-                turn.endTime = NSDate()
-                turn.duration = NSDate().timeIntervalSinceDate(turn.startTime)
-                turn.endLocation = sharedLocation.locations[sharedLocation.locations.endIndex - 1]
-                appDelegate.saveContext()
-            }
+        } else if SMA < tL && priorSMA >= tL{
+            //dynamicTimeWarping(priorRotationRatesInTurn, t: rotationRatesInTurn)
+            updateDTW()
+            priorRotationRatesInTurn = rotationRatesInTurn
+            turn.sensorData = deviceMotions
+            turn.turnNumber = turnCount
+            turn.drive = drive
+            turn.endTime = NSDate()
+            turn.duration = NSDate().timeIntervalSinceDate(turn.startTime)
+            turn.endLocation = sharedLocation.locations[sharedLocation.locations.endIndex - 1]
+            appDelegate.saveContext()
         }
         priorSMA = SMA
     }
@@ -204,25 +212,49 @@ class MotionManager: NSObject {
         }
     }
     
+    func accelMagnitude(motion: CMDeviceMotion) -> Double {
+        return sqrt(pow(motion.userAcceleration.x,2) + pow(motion.userAcceleration.y,2) + pow(motion.userAcceleration.z,2))
+    }
+    
+    
+    func calibrateOrientation(motion: CMDeviceMotion) -> Bool {
+        let magnitudeThreshold = 0.5 //FIX THIS THRESHOLD
+        if (accelMagnitude(motion) >= magnitudeThreshold) {
+            rm = motion.rotationMatrix()
+            return true
+        }
+        return false
+    }
+    
+    
     /**
         Begins monitoring device motion and creates new Drive object
     */
     func startMonitoringDeviceMotion() {
-        drive = NSEntityDescription.insertNewObjectForEntityForName("Drive", inManagedObjectContext: managedObjectContext) as! Drive
         sharedLocation.manager.startUpdatingLocation()
+        drive = NSEntityDescription.insertNewObjectForEntityForName("Drive", inManagedObjectContext: managedObjectContext) as! Drive
         turnCount = 0
         startMonitoringDate = NSDate()
         
+        var isOreinted = false
         if manager.deviceMotionAvailable {
             manager.deviceMotionUpdateInterval = 0.04
             
             manager.startDeviceMotionUpdatesToQueue(NSOperationQueue.mainQueue()) {
                 [weak self] (data: CMDeviceMotion?, error: NSError?) in
                 
-                //TRY WITHOUT REFERENCE FRAME CHANGE
-                self!.detectDeviceRotationEndpoints(data!)
-                //self!.deviceMotions.append(data!)
-                //data?.userAcceleration.x
+                /// ADD POPUP SCREEN TO TELL USER TO DRIVE FORWARD TO CALIBRATE
+                if !isOreinted {
+                    if self!.calibrateOrientation(data!) {
+                        isOreinted = true
+                    }
+                } else {
+                    //TRY WITHOUT REFERENCE FRAME CHANGE
+                    print("else ran")
+                    self!.detectDeviceRotationEndpoints(data!)
+                    //self!.deviceMotions.append(data!)
+                    //data?.userAcceleration.x
+                }
             }
         }
     }
@@ -262,7 +294,7 @@ class MotionManager: NSObject {
                 for tempTurn in tempDrive.turns {
                     let templateTurn = tempTurn as! Turn
                     if comparisonTurn.turnNumber == templateTurn.turnNumber {
-                        dynamicTimeWarping(comparisonTurn.sensorData as! [Double], t: templateTurn.sensorData as! [Double])
+                        //dynamicTimeWarping(comparisonTurn.sensorData as! [Double], t: templateTurn.sensorData as! [Double])
                         turnScores[driveCounter][Int(comparisonTurn.turnNumber) - 1] = DTW
                     }
                 }

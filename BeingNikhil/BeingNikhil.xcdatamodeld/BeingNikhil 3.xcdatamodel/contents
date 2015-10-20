@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7701" systemVersion="14F27" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9056" systemVersion="15A284" minimumToolsVersion="Automatic">
     <entity name="Comparison" representedClassName="BeingNikhil.Comparison" syncable="YES">
         <attribute name="finalDTW" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -10,6 +10,7 @@
     <entity name="Drive" representedClassName="BeingNikhil.Drive" syncable="YES">
         <attribute name="duration" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="locations" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="rotationMatrix" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="timestamp" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="comparisons" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Comparison" inverseName="drive" inverseEntity="Comparison" syncable="YES"/>
         <relationship name="subject" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Subject" inverseName="drives" inverseEntity="Subject" syncable="YES"/>
@@ -47,7 +48,7 @@
     </entity>
     <elements>
         <element name="Comparison" positionX="-45" positionY="90" width="128" height="120"/>
-        <element name="Drive" positionX="-63" positionY="-18" width="128" height="150"/>
+        <element name="Drive" positionX="-63" positionY="-18" width="128" height="165"/>
         <element name="Route" positionX="-45" positionY="45" width="128" height="90"/>
         <element name="Subject" positionX="-36" positionY="54" width="128" height="105"/>
         <element name="Template" positionX="-45" positionY="90" width="128" height="135"/>

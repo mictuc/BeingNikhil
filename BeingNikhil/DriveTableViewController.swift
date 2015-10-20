@@ -104,7 +104,7 @@ class DriveTableViewController: TableViewSuperClass {
                     for turn in drive.turns {
                         for secondTurn in secondDrive.turns {
                             if turn.valueForKey("turnNumber") as! NSNumber == secondTurn.valueForKey("turnNumber") as! NSNumber {
-                                sharedMotion.dynamicTimeWarping(turn.valueForKey("sensorData") as! [Double], t: secondTurn.valueForKey("sensorData") as! [Double])
+//                                sharedMotion.dynamicTimeWarping(turn.valueForKey("sensorData") as! [Double], t: secondTurn.valueForKey("sensorData") as! [Double])
                                 averageTurnDTW += sharedMotion.DTW
                             }
                         }
