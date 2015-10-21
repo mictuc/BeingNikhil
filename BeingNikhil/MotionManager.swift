@@ -98,7 +98,7 @@ class MotionManager: NSObject {
         - parameter z: Data from the z-axis gyroscope (adjusted for reference frame)
     */
     func updateSimpleMovingAverageOfRotationalEnergy(z: Double) {
-        let k = 20
+        let k = 25
         
         rotationRates.append(z)
         
@@ -119,10 +119,10 @@ class MotionManager: NSObject {
         - parameter s: Array of sensor data for first turn
         - parameter t: Array of sensor data for second turn
     */
-    func dynamicTimeWarping(s: [Double], t: [Double], y: [Double], u:[Double]) { //change to just data
+    func dynamicTimeWarping(s: [Double], t: [Double]) -> Double {
         let n = s.count, m = t.count
         
-        if (n == 0 || m == 0) { return }
+        if (n == 0 || m == 0) { return 0}
         
         var DTW = [[Double]](count: n+1, repeatedValue: [Double](count: m+1, repeatedValue: Double.infinity))
         
@@ -136,7 +136,33 @@ class MotionManager: NSObject {
             }
         }
         self.DTW = DTW[n][m]
+        return DTW[n][m]
     }
+    
+    func multiDimensionalDynamicTimeWarping(s: [CMDeviceMotion], t: [CMDeviceMotion], srm: [[Double]], trm: [[Double]]) {
+        
+        var sAccelData = [Double]()
+        var tAccelData = [Double]()
+        var sGyroData = [Double]()
+        var tGyroData = [Double]()
+        for i in 0...s.count - 1 {
+            sAccelData.append(s[i].userAccelerationInReferenceFrame(srm).x)
+            sGyroData.append(s[i].userRotationInReferenceFrame(srm).z)
+        }
+        for i in 0...t.count - 1 {
+            tAccelData.append(t[i].userAccelerationInReferenceFrame(trm).x)
+            tGyroData.append(t[i].userRotationInReferenceFrame(trm).z)
+        }
+        
+        let accelDTW = dynamicTimeWarping(sAccelData, t: tAccelData)
+        let gyroDTW = dynamicTimeWarping(sGyroData, t: tGyroData)
+        
+        /// FIGURE OUT WHICH COST FUNCTION TO USE!
+        let DTW = (exp(-accelDTW) + exp(-gyroDTW)) / 2
+        self.DTW = DTW
+//        let DTW = sqrt(pow(accelDTW, 2) + pow(gyroDTW, 2))
+    }
+
     
     /**
         Determines when a turn event starts and stops.
@@ -166,7 +192,7 @@ class MotionManager: NSObject {
                 deviceMotions.append(motion)
             }
         } else if SMA < tL && priorSMA >= tL{
-            //dynamicTimeWarping(priorRotationRatesInTurn, t: rotationRatesInTurn)
+            dynamicTimeWarping(priorRotationRatesInTurn, t: rotationRatesInTurn)
             updateDTW()
             priorRotationRatesInTurn = rotationRatesInTurn
             turn.sensorData = deviceMotions
@@ -245,6 +271,7 @@ class MotionManager: NSObject {
                 
                 /// ADD POPUP SCREEN TO TELL USER TO DRIVE FORWARD TO CALIBRATE
                 if !isOreinted {
+                    self!.updateSimpleMovingAverageOfRotationalEnergy((data?.rotationRateInReferenceFrame().z)!)
                     if self!.calibrateOrientation(data!) {
                         isOreinted = true
                     }
@@ -294,7 +321,7 @@ class MotionManager: NSObject {
                 for tempTurn in tempDrive.turns {
                     let templateTurn = tempTurn as! Turn
                     if comparisonTurn.turnNumber == templateTurn.turnNumber {
-                        //dynamicTimeWarping(comparisonTurn.sensorData as! [Double], t: templateTurn.sensorData as! [Double])
+                        multiDimensionalDynamicTimeWarping(comparisonTurn.sensorData, t: templateTurn.sensorData, srm: drive.rm as! [[Double]], trm: templateDrive.rm)
                         turnScores[driveCounter][Int(comparisonTurn.turnNumber) - 1] = DTW
                     }
                 }

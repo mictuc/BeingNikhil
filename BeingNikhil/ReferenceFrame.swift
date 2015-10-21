@@ -70,6 +70,16 @@ extension CMDeviceMotion {
         uaInRefFrame.z = ua.x * rm[3][1] + ua.y * rm[3][2] + ua.z * rm[3][3]
         return uaInRefFrame;
     }
+    
+    func userRotationInReferenceFrame(rm:[[Double]]) -> CMAcceleration {
+        var uaInRefFrame = CMAcceleration()
+        let rr = rotationRate
+        uaInRefFrame.x = rr.x * rm[1][1] + rr.y * rm[1][2] + rr.z * rm[1][3]
+        uaInRefFrame.y = rr.x * rm[2][1] + rr.y * rm[2][2] + rr.z * rm[2][3]
+        uaInRefFrame.z = rr.x * rm[3][1] + rr.y * rm[3][2] + rr.z * rm[3][3]
+        return uaInRefFrame;
+    }
+
 
 
 //    func userAccelerationInReferenceFrame() -> CMAcceleration {
