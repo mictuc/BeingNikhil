@@ -65,6 +65,9 @@ class MotionManager: NSObject {
     
     /// Rotation Matrix oriented by gravity and a forward vector (assumed to be the first movement)
     var rm = [[Double]]()
+    
+    /// Simple moving average window size
+    let k = 20
 
     /// Updates the DTW label in the Main View Controller
     func updateDTW() {
@@ -98,8 +101,7 @@ class MotionManager: NSObject {
         - parameter z: Data from the z-axis gyroscope (adjusted for reference frame)
     */
     func updateSimpleMovingAverageOfRotationalEnergy(z: Double) {
-        let k = 25
-        
+        print(rotationRates.count)
         rotationRates.append(z)
         
         if rotationRates.count > k {
@@ -110,6 +112,7 @@ class MotionManager: NSObject {
         } else {
             SMA = rotationRates.map({ z in pow(z, 2) }).reduce(0, combine: +) / Double(rotationRates.count)
         }
+        //print(SMA)
     }
     
     /**
@@ -247,10 +250,18 @@ class MotionManager: NSObject {
         let magnitudeThreshold = 0.5 //FIX THIS THRESHOLD
         if (accelMagnitude(motion) >= magnitudeThreshold) {
             rm = motion.rotationMatrix()
+            drive.rotationMatrix = rm
             return true
         }
         return false
     }
+//    
+//    func deviceMotionMonitoring() {
+//        self.manager.startDeviceMotionUpdatesToQueue(NSOperationQueue.mainQueue()) {
+//            [weak self] (data: CMDeviceMotion?, error: NSError?) in
+//            self!.detectDeviceRotationEndpoints(data!)
+//        }
+//    }
     
     
     /**
@@ -268,19 +279,16 @@ class MotionManager: NSObject {
             
             manager.startDeviceMotionUpdatesToQueue(NSOperationQueue.mainQueue()) {
                 [weak self] (data: CMDeviceMotion?, error: NSError?) in
-                
-                /// ADD POPUP SCREEN TO TELL USER TO DRIVE FORWARD TO CALIBRATE
                 if !isOreinted {
-                    self!.updateSimpleMovingAverageOfRotationalEnergy((data?.rotationRateInReferenceFrame().z)!)
+                    self!.rotationRates.append((data?.rotationRateInReferenceFrame().z)!)
+                    if self!.rotationRates.count > self!.k {
+                        self!.rotationRates.removeAtIndex(0)
+                    }
                     if self!.calibrateOrientation(data!) {
                         isOreinted = true
                     }
                 } else {
-                    //TRY WITHOUT REFERENCE FRAME CHANGE
-                    print("else ran")
                     self!.detectDeviceRotationEndpoints(data!)
-                    //self!.deviceMotions.append(data!)
-                    //data?.userAcceleration.x
                 }
             }
         }
@@ -304,14 +312,11 @@ class MotionManager: NSObject {
         var templateTimestamps = [String]()
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "MM-dd h:mm a"
-
         let sortDescriptor = NSSortDescriptor(key: "timestamp", ascending: true)
         let templateDrives = template.drives.sortedArrayUsingDescriptors([sortDescriptor])
-
         for _ in 1...templateDrives.count {
             turnScores.append(Array(count: drive.turns.count, repeatedValue:Double()))
         }
-        
         var driveCounter = 0
         for templateDrive in templateDrives {
             let tempDrive = templateDrive as! Drive
@@ -321,8 +326,11 @@ class MotionManager: NSObject {
                 for tempTurn in tempDrive.turns {
                     let templateTurn = tempTurn as! Turn
                     if comparisonTurn.turnNumber == templateTurn.turnNumber {
-                        multiDimensionalDynamicTimeWarping(comparisonTurn.sensorData, t: templateTurn.sensorData, srm: drive.rm as! [[Double]], trm: templateDrive.rm)
+                        print("7")
+                        multiDimensionalDynamicTimeWarping(comparisonTurn.sensorData , t: templateTurn.sensorData , srm: drive.rotationMatrix, trm: tempDrive.rotationMatrix)
+                        print("8")
                         turnScores[driveCounter][Int(comparisonTurn.turnNumber) - 1] = DTW
+                        print("9")
                     }
                 }
             }
@@ -331,7 +339,6 @@ class MotionManager: NSObject {
         
         return turnScores
     }
-    
     
 }
 
