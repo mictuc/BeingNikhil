@@ -279,6 +279,9 @@ class MotionManager: NSObject {
             
             manager.startDeviceMotionUpdatesToQueue(NSOperationQueue.mainQueue()) {
                 [weak self] (data: CMDeviceMotion?, error: NSError?) in
+                
+                /// prompt user with pop-up window to indicate orientation calibration
+                
                 if !isOreinted {
                     self!.rotationRates.append((data?.rotationRateInReferenceFrame().z)!)
                     if self!.rotationRates.count > self!.k {
