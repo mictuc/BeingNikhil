@@ -20,9 +20,10 @@ extension CMDeviceMotion {
         grm.append([zrm.m21, zrm.m22, zrm.m23])
         grm.append([zrm.m31, zrm.m32, zrm.m33])
         let ua = userAcceleration
-        var axVector = ua.x * zrm.m11 + ua.y * zrm.m12 + ua.z * zrm.m13
-        axVector /= sqrt(pow(ua.x,2) + pow(ua.y,2) + pow(ua.z,2))
-        let theta = acos(axVector)
+        let theta = acos((ua.x)/sqrt(pow(ua.x,2) + pow(ua.y,2) + pow(ua.z,2)))
+//        var axVector = ua.x * zrm.m11 + ua.y * zrm.m12 + ua.z * zrm.m13
+//        axVector /= sqrt(pow(ua.x,2) + pow(ua.y,2) + pow(ua.z,2))
+//        let theta = acos(axVector)
         print(theta)
         var rm = [[Double]]()
         var uarm = [[Double]]()

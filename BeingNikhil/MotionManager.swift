@@ -95,6 +95,7 @@ class MotionManager: NSObject {
 //        return y
 //    }
 //    
+    
     /**
         Updates the simple moving average for the rotational movement around the z-axis
     
@@ -325,9 +326,9 @@ class MotionManager: NSObject {
             let tempDrive = templateDrive as! Drive
             templateTimestamps.append(dateFormatter.stringFromDate(tempDrive.timestamp))
             for turn in drive.turns {
-                let comparisonTurn = turn as! Turn
+                let comparisonTurn = turn
                 for tempTurn in tempDrive.turns {
-                    let templateTurn = tempTurn as! Turn
+                    let templateTurn = tempTurn
                     if comparisonTurn.turnNumber == templateTurn.turnNumber {
                         print("7")
                         multiDimensionalDynamicTimeWarping(comparisonTurn.sensorData , t: templateTurn.sensorData , srm: drive.rotationMatrix, trm: tempDrive.rotationMatrix)

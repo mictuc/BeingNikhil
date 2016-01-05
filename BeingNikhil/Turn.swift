@@ -26,10 +26,10 @@ class Turn: NSManagedObject {
     @NSManaged var turnNumber: NSNumber
     
     /// Starting location of the turn
-    @NSManaged var startLocation: AnyObject
+    @NSManaged var startLocation: CLLocation
 
     /// Ending location of the turn
-    @NSManaged var endLocation: AnyObject
+    @NSManaged var endLocation: CLLocation
 
     /// Starting timestamp of the turn
     @NSManaged var startTime: NSDate
@@ -50,14 +50,13 @@ class Turn: NSManagedObject {
         let coalescedStartTime = dateFormatter.stringFromDate(startTime)
         let coalescedEndTime = dateFormatter.stringFromDate(endTime)
         let coalescedDuration = duration
-        let coalescedStartLocation = startLocation as! CLLocation
-        let coalescedEndLocation = endLocation as! CLLocation
+        let coalescedStartLocation = startLocation
+        let coalescedEndLocation = endLocation
         var coalescedTurnData = String()
         
-//        for datum in sensorData {
-//            coalescedTurnData += "\(datum),"
-//            
-//        }
+        for datum in sensorData {
+            coalescedTurnData += "\(datum.userRotationInReferenceFrame(drive.rotationMatrix).z),\(datum.userRotationInReferenceFrame(drive.rotationMatrix).y),"
+        }
         
         return "\(coalescedTurnCount),\(coalescedStartTime),\(coalescedEndTime),\(coalescedDuration),"
             + "\(coalescedStartLocation.coordinate.latitude),\(coalescedStartLocation.coordinate.longitude),"
